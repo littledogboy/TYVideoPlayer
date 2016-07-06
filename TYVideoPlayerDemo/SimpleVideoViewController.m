@@ -60,7 +60,7 @@
 #pragma mark -  action
 
 - (IBAction)loadTrackAction:(id)sender {
-    [self loadVideo];
+    [self.videoPlayer reloadCurrentVideoTrack];
 }
 
 - (IBAction)playAction:(id)sender {
@@ -86,7 +86,7 @@
 {
     switch (videoPlayer.state) {
         case TYVideoPlayerStateContentReadyToPlay:
-            //[videoPlayer play];
+            [videoPlayer play];
             break;
             
         default:

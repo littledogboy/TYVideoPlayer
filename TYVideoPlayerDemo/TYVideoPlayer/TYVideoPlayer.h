@@ -47,7 +47,9 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerTimeOut) {
 typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
     // 未知
     TYVideoPlayerStateUnknown,
-    // 初始化加载中
+    // 请求StreamURL
+    TYVideoPlayerStateRequestStreamURL,
+    // 加载中
     TYVideoPlayerStateContentLoading,
     // 准备播放
     TYVideoPlayerStateContentReadyToPlay,
@@ -121,9 +123,11 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;
 
-- (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayer:(UIView<TYPlayerLayer> *)playerLayer;
-
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track;
+
+// init
+
+- (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayer:(UIView<TYPlayerLayer> *)playerLayer;
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayer:(UIView<TYPlayerLayer> *)layerView;
 
@@ -135,7 +139,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)pause;
 
-// stop will clear videoPlayer, so you need loadVideoWithTrack
+// stop will clear videoPlayer
 - (void)stop;
 
 - (void)seekToTime:(NSTimeInterval)time;

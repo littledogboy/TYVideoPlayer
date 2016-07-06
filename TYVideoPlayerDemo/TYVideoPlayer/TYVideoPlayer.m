@@ -167,11 +167,13 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
     _state = state;
     
     switch (state) {
-        case TYVideoPlayerStateContentLoading:
-//             [self performSelector:@selector(URLAssetTimeOut) withObject:nil afterDelay:60];
+        case TYVideoPlayerStateRequestStreamURL:
             if (oldState == TYVideoPlayerStateContentPlaying && [self isPlaying]) {
                 [_player pause];
             }
+            break;
+        case TYVideoPlayerStateContentLoading:
+             [self performSelector:@selector(URLAssetTimeOut) withObject:nil afterDelay:60];
             break;
         case TYVideoPlayerStateSeeking:
             [self performSelector:@selector(seekingTimeOut) withObject:nil afterDelay:60];
@@ -219,6 +221,8 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
     switch (state) {
         case TYVideoPlayerStateUnknown:
             return @"TYVideoPlayerStateUnknown";
+        case TYVideoPlayerStateRequestStreamURL:
+            return @"TYVideoPlayerStateRequestStreamURL";
         case TYVideoPlayerStateContentLoading:
             return @"TYVideoPlayerStateContentLoading";
         case TYVideoPlayerStateContentReadyToPlay:
@@ -244,7 +248,21 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
 
 - (void)reloadCurrentVideoTrack
 {
-    
+    switch (_state) {
+        case TYVideoPlayerStateRequestStreamURL:
+        case TYVideoPlayerStateContentLoading:
+        case TYVideoPlayerStateContentPaused:
+        case TYVideoPlayerStateStopped:
+        case TYVideoPlayerStateError:
+            [self reloadVideoTrack:_track];
+            break;
+        case TYVideoPlayerStateContentPlaying:
+            [self pauseContent];
+            [self reloadVideoTrack:_track];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL
@@ -258,6 +276,11 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
     [self loadVideoWithTrack:track playerLayer:playerLayer];
 }
 
+- (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track
+{
+    [self loadVideoWithTrack:track playerLayer:nil];
+}
+
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayer:(UIView<TYPlayerLayer> *)playerLayer
 {
     if (_track && _state != TYVideoPlayerStateError) {
@@ -268,21 +291,24 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
         _playerLayer = playerLayer;
     }
     self.track = track;
-    self.state = TYVideoPlayerStateContentLoading;
+    self.track.isPlayedToEnd = NO;
+    
+    [self reloadVideoTrack:track];
+}
+
+- (void)reloadVideoTrack:(id<TYVideoPlayerTrack>)track
+{
+    self.state = TYVideoPlayerStateRequestStreamURL;
     switch (_state) {
         case TYVideoPlayerStateError:
         case TYVideoPlayerStateContentPaused:
         case TYVideoPlayerStateContentLoading:
+        case TYVideoPlayerStateRequestStreamURL:
             [self playVideoWithTrack:track];
             break;
         default:
             break;
     };
-}
-
-- (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track
-{
-    [self loadVideoWithTrack:track playerLayer:nil];
 }
 
 - (void)playVideoWithTrack:(id<TYVideoPlayerTrack>)track
@@ -307,9 +333,6 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
             return;
         }
         TYDLog(@"playVideoWithStreamURL %@",url);
-        if (weakSelf.state == TYVideoPlayerStateContentLoading) {
-            [self performSelector:@selector(URLAssetTimeOut) withObject:nil afterDelay:60];
-        }
         [weakSelf playVideoWithStreamURL:url playerLayerView:weakSelf.playerLayer];
     }];
 }
@@ -321,6 +344,9 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
     if (_state == TYVideoPlayerStateStopped) {
         return;
     }
+    
+    _track.streamURL = streamURL;
+    self.state = TYVideoPlayerStateContentLoading;
     
     [self willPlayTrack:_track];
     
@@ -406,10 +432,10 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
 
 - (void)pauseContent
 {
-    [self pauseContentIsUserAction:NO completionHandler:nil];
+    [self pauseContentCompletion:nil];
 }
 
-- (void)pauseContentIsUserAction:(BOOL)isUserAction completionHandler:(void (^)())completionHandler
+- (void)pauseContentCompletion:(void (^)())completion
 {
     dispatch_main_async_safe_ty(^{
         switch ([_playerItem status]) {
@@ -419,7 +445,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
             case AVPlayerItemStatusUnknown:
                 NSLog(@"Trying to pause content but AVPlayerItemStatusUnknown.");
                 self.state = TYVideoPlayerStateContentLoading;
-                if (completionHandler) completionHandler();
+                if (completion) completion();
                 return;
             default:
                 break;
@@ -446,7 +472,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
             case TYVideoPlayerStateSeeking:
             case TYVideoPlayerStateError:
                 self.state = TYVideoPlayerStateContentPaused;
-                if (completionHandler) completionHandler();
+                if (completion) completion();
                 break;
             default:
                 break;
@@ -466,7 +492,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
     __weak typeof(self) weakSelf = self;
     [self seekToTimeInSecond:time isUserAction:YES completionHandler:^(BOOL finished) {
         if (finished){
-            [weakSelf pauseContentIsUserAction:NO completionHandler:^{
+            [weakSelf pauseContentCompletion:^{
                 [weakSelf playContent];
             }];
         }

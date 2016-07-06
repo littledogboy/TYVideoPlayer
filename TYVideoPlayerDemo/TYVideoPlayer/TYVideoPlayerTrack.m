@@ -23,4 +23,11 @@
     completeBlock(_streamURL);
 }
 
+- (void)resetTrack
+{
+    self.isPlayedToEnd = NO;
+    self.isVideoLoadedBefore = NO;
+    self.lastTimeInSeconds = 0;
+}
+
 @end

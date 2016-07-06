@@ -57,4 +57,6 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerTrackType) {
 // 可以直接返回 或 异步请求获取返回StreamURL 默认直接返回
 - (void)streamURLWithCompleteBlock:(void (^)(NSURL *))completeBlock;
 
+- (void)resetTrack;
+
 @end

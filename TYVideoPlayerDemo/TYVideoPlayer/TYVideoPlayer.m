@@ -30,6 +30,16 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
     }
 }
 
+// player KVO
+static NSString *const kTYVideoPlayerTracksKey = @"tracks";
+static NSString *const kTYVideoPlayerPlayableKey = @"playable";
+static NSString *const kTYVideoPlayerDurationKey = @"duration";
+
+static NSString *const kTYVideoPlayerStatusKey = @"status";
+static NSString *const kTYVideoPlayerBufferEmptyKey = @"playbackBufferEmpty";
+static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepUp";
+
+
 @interface TYVideoPlayer () {
     BOOL _isFinishSeek;
 }
@@ -199,11 +209,11 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
             [self notifyErrorCode:kVideoPlayerErrorAVPlayerFail error:nil];
         case TYVideoPlayerStateStopped:
             [self cancleAllTimeOut];
+            [_playerItem cancelPendingSeeks];
             if (oldState != TYVideoPlayerStateContentLoading) {
                 _track.isVideoLoadedBefore = NO;
                 _track.lastTimeInSeconds = [self currentTime];
             }
-            [_playerItem cancelPendingSeeks];
             [_player pause];
             [self clearVideoPlayer];
         default:
@@ -361,7 +371,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
     AVURLAsset *URLAsset = [[AVURLAsset alloc] initWithURL:streamURL options:@{AVURLAssetPreferPreciseDurationAndTimingKey : @YES}];
     _URLAsset = URLAsset;
     
-    [URLAsset loadValuesAsynchronouslyForKeys:@[ @"tracks",@"playable",@"duration"] completionHandler:^{
+    [URLAsset loadValuesAsynchronouslyForKeys:@[kTYVideoPlayerTracksKey,kTYVideoPlayerPlayableKey,kTYVideoPlayerDurationKey] completionHandler:^{
         dispatch_main_async_safe_ty(^{
             if (_state == TYVideoPlayerStateStopped) {
                 return;
@@ -374,7 +384,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
             }
             
             NSError *error = nil;
-            AVKeyValueStatus status = [URLAsset statusOfValueForKey:@"tracks" error:&error];
+            AVKeyValueStatus status = [URLAsset statusOfValueForKey:kTYVideoPlayerTracksKey error:&error];
             if (status == AVKeyValueStatusLoaded) {
                     _track.videoType = CMTimeGetSeconds([URLAsset duration]) == 0 ? TYVideoPlayerTrackLIVE : TYVideoPlayerTrackVOD;
                     _track.videoDuration = CMTimeGetSeconds([URLAsset duration]);
@@ -628,9 +638,9 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
 
 - (void)addPlayerItemObservers:(AVPlayerItem *)playerItem
 {
-    [playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-    [playerItem addObserver:self forKeyPath:@"playbackBufferEmpty" options:NSKeyValueObservingOptionNew context:nil];
-    [playerItem addObserver:self forKeyPath:@"playbackLikelyToKeepUp" options:NSKeyValueObservingOptionNew context:nil];
+    [playerItem addObserver:self forKeyPath:kTYVideoPlayerStatusKey options:NSKeyValueObservingOptionNew context:nil];
+    [playerItem addObserver:self forKeyPath:kTYVideoPlayerBufferEmptyKey options:NSKeyValueObservingOptionNew context:nil];
+    [playerItem addObserver:self forKeyPath:kTYVideoPlayerLikelyToKeepUpKey options:NSKeyValueObservingOptionNew context:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerDidPlayToEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerDidFailedToPlay:) name:AVPlayerItemFailedToPlayToEndTimeNotification object:playerItem];
@@ -638,9 +648,9 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
 
 - (void)removePlayerItemObservers:(AVPlayerItem *)playerItem
 {
-    [playerItem removeObserver:self forKeyPath:@"status"];
-    [playerItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
-    [playerItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+    [playerItem removeObserver:self forKeyPath:kTYVideoPlayerStatusKey];
+    [playerItem removeObserver:self forKeyPath:kTYVideoPlayerBufferEmptyKey];
+    [playerItem removeObserver:self forKeyPath:kTYVideoPlayerLikelyToKeepUpKey];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemFailedToPlayToEndTimeNotification object:playerItem];
@@ -651,7 +661,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if (object == _player) {
-        if ([keyPath isEqualToString:@"status"]) {
+        if ([keyPath isEqualToString:kTYVideoPlayerStatusKey]) {
             switch ([_player status]) {
                 case AVPlayerStatusReadyToPlay:
                     self.state = TYVideoPlayerStateContentReadyToPlay;
@@ -664,13 +674,13 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
             }
         }
     }else if (object == _playerItem) {
-        if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
+        if ([keyPath isEqualToString:kTYVideoPlayerBufferEmptyKey]) {
             TYDLog(@"playbackBufferEmpty");
              // TODO 这里判断可能还不太准确
             if (self.playerItem.isPlaybackBufferEmpty && [self currentTime] > 0 && [self currentTime] < [self currentDuration] - 1 && _state == TYVideoPlayerStateContentPlaying) {
                 self.state = TYVideoPlayerStateBuffering;
             }
-        }else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
+        }else if ([keyPath isEqualToString:kTYVideoPlayerLikelyToKeepUpKey]) {
             TYDLog(@"playbackLikelyToKeepUp");
             if (_playerItem.playbackLikelyToKeepUp) {
                 _isFinishSeek = YES;
@@ -681,7 +691,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
                     self.state = TYVideoPlayerStateContentPlaying;
                 }
             }
-        }else if ([keyPath isEqualToString:@"status"]) {
+        }else if ([keyPath isEqualToString:kTYVideoPlayerStatusKey]) {
             switch ([_playerItem status]) {
                 case AVPlayerItemStatusReadyToPlay:
                     self.state = TYVideoPlayerStateContentReadyToPlay;
@@ -769,7 +779,7 @@ NS_INLINE void dispatch_main_async_safe_ty(dispatch_block_t block) {
 
 - (void)dealloc
 {
-    TYDLog(@"dealloc");
+    TYDLog(@"TYVideoPlayer dealloc");
 }
 
 @end

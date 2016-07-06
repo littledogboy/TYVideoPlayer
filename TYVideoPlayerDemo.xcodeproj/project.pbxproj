@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B0655361D1BD7BE007F6173 /* TYPlayerLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B0655351D1BD7BE007F6173 /* TYPlayerLayerView.m */; };
 		2B11F75A1D17888000BFA5DF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B11F7591D17888000BFA5DF /* main.m */; };
 		2B11F75D1D17888000BFA5DF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B11F75C1D17888000BFA5DF /* AppDelegate.m */; };
 		2B11F7601D17888000BFA5DF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B11F75F1D17888000BFA5DF /* ViewController.m */; };
@@ -14,6 +15,12 @@
 		2B11F7651D17888000BFA5DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B11F7641D17888000BFA5DF /* Assets.xcassets */; };
 		2B11F7681D17888000BFA5DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B11F7661D17888000BFA5DF /* LaunchScreen.storyboard */; };
 		2B11F7731D17888000BFA5DF /* TYVideoPlayerDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B11F7721D17888000BFA5DF /* TYVideoPlayerDemoTests.m */; };
+		2B34FC821D18D73400B2F3E6 /* TYVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B34FC811D18D73400B2F3E6 /* TYVideoPlayer.m */; };
+		2B34FC851D1935C000B2F3E6 /* AVPlayer+TYPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B34FC841D1935C000B2F3E6 /* AVPlayer+TYPlayer.m */; };
+		2B34FC891D19361600B2F3E6 /* TYVideoPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B34FC881D19361600B2F3E6 /* TYVideoPlayerTrack.m */; };
+		2B59ACF71D2B936000B10FB4 /* TYVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACF61D2B936000B10FB4 /* TYVideoPlayerView.m */; };
+		2B59ACFA1D2B93E800B10FB4 /* TYVideoControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACF91D2B93E800B10FB4 /* TYVideoControlView.m */; };
+		2B59ACFD1D2BA80300B10FB4 /* SimpleVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +34,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2B0655341D1BD7BE007F6173 /* TYPlayerLayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPlayerLayerView.h; sourceTree = "<group>"; };
+		2B0655351D1BD7BE007F6173 /* TYPlayerLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPlayerLayerView.m; sourceTree = "<group>"; };
 		2B11F7551D17888000BFA5DF /* TYVideoPlayerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYVideoPlayerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B11F7591D17888000BFA5DF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2B11F75B1D17888000BFA5DF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -40,6 +49,18 @@
 		2B11F76E1D17888000BFA5DF /* TYVideoPlayerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TYVideoPlayerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B11F7721D17888000BFA5DF /* TYVideoPlayerDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYVideoPlayerDemoTests.m; sourceTree = "<group>"; };
 		2B11F7741D17888000BFA5DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B34FC801D18D73400B2F3E6 /* TYVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoPlayer.h; sourceTree = "<group>"; };
+		2B34FC811D18D73400B2F3E6 /* TYVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoPlayer.m; sourceTree = "<group>"; };
+		2B34FC831D1935C000B2F3E6 /* AVPlayer+TYPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVPlayer+TYPlayer.h"; sourceTree = "<group>"; };
+		2B34FC841D1935C000B2F3E6 /* AVPlayer+TYPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVPlayer+TYPlayer.m"; sourceTree = "<group>"; };
+		2B34FC871D19361600B2F3E6 /* TYVideoPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoPlayerTrack.h; sourceTree = "<group>"; };
+		2B34FC881D19361600B2F3E6 /* TYVideoPlayerTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoPlayerTrack.m; sourceTree = "<group>"; };
+		2B59ACF51D2B936000B10FB4 /* TYVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoPlayerView.h; sourceTree = "<group>"; };
+		2B59ACF61D2B936000B10FB4 /* TYVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoPlayerView.m; sourceTree = "<group>"; };
+		2B59ACF81D2B93E800B10FB4 /* TYVideoControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoControlView.h; sourceTree = "<group>"; };
+		2B59ACF91D2B93E800B10FB4 /* TYVideoControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoControlView.m; sourceTree = "<group>"; };
+		2B59ACFB1D2BA80300B10FB4 /* SimpleVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleVideoViewController.h; sourceTree = "<group>"; };
+		2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleVideoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,10 +102,13 @@
 		2B11F7571D17888000BFA5DF /* TYVideoPlayerDemo */ = {
 			isa = PBXGroup;
 			children = (
+				2B11F77D1D17889B00BFA5DF /* TYVideoPlayer */,
 				2B11F75B1D17888000BFA5DF /* AppDelegate.h */,
 				2B11F75C1D17888000BFA5DF /* AppDelegate.m */,
 				2B11F75E1D17888000BFA5DF /* ViewController.h */,
 				2B11F75F1D17888000BFA5DF /* ViewController.m */,
+				2B59ACFB1D2BA80300B10FB4 /* SimpleVideoViewController.h */,
+				2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */,
 				2B11F7611D17888000BFA5DF /* Main.storyboard */,
 				2B11F7641D17888000BFA5DF /* Assets.xcassets */,
 				2B11F7661D17888000BFA5DF /* LaunchScreen.storyboard */,
@@ -109,6 +133,41 @@
 				2B11F7741D17888000BFA5DF /* Info.plist */,
 			);
 			path = TYVideoPlayerDemoTests;
+			sourceTree = "<group>";
+		};
+		2B11F77D1D17889B00BFA5DF /* TYVideoPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				2B59ACF31D2B932600B10FB4 /* Player */,
+				2B59ACF41D2B933200B10FB4 /* View */,
+			);
+			path = TYVideoPlayer;
+			sourceTree = "<group>";
+		};
+		2B59ACF31D2B932600B10FB4 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				2B34FC801D18D73400B2F3E6 /* TYVideoPlayer.h */,
+				2B34FC811D18D73400B2F3E6 /* TYVideoPlayer.m */,
+				2B34FC871D19361600B2F3E6 /* TYVideoPlayerTrack.h */,
+				2B34FC881D19361600B2F3E6 /* TYVideoPlayerTrack.m */,
+				2B0655341D1BD7BE007F6173 /* TYPlayerLayerView.h */,
+				2B0655351D1BD7BE007F6173 /* TYPlayerLayerView.m */,
+				2B34FC831D1935C000B2F3E6 /* AVPlayer+TYPlayer.h */,
+				2B34FC841D1935C000B2F3E6 /* AVPlayer+TYPlayer.m */,
+			);
+			name = Player;
+			sourceTree = "<group>";
+		};
+		2B59ACF41D2B933200B10FB4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2B59ACF51D2B936000B10FB4 /* TYVideoPlayerView.h */,
+				2B59ACF61D2B936000B10FB4 /* TYVideoPlayerView.m */,
+				2B59ACF81D2B93E800B10FB4 /* TYVideoControlView.h */,
+				2B59ACF91D2B93E800B10FB4 /* TYVideoControlView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,9 +272,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B59ACFD1D2BA80300B10FB4 /* SimpleVideoViewController.m in Sources */,
 				2B11F7601D17888000BFA5DF /* ViewController.m in Sources */,
 				2B11F75D1D17888000BFA5DF /* AppDelegate.m in Sources */,
+				2B0655361D1BD7BE007F6173 /* TYPlayerLayerView.m in Sources */,
 				2B11F75A1D17888000BFA5DF /* main.m in Sources */,
+				2B34FC891D19361600B2F3E6 /* TYVideoPlayerTrack.m in Sources */,
+				2B34FC851D1935C000B2F3E6 /* AVPlayer+TYPlayer.m in Sources */,
+				2B59ACFA1D2B93E800B10FB4 /* TYVideoControlView.m in Sources */,
+				2B59ACF71D2B936000B10FB4 /* TYVideoPlayerView.m in Sources */,
+				2B34FC821D18D73400B2F3E6 /* TYVideoPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +472,7 @@
 				2B11F7791D17888000BFA5DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2B11F77A1D17888000BFA5DF /* Build configuration list for PBXNativeTarget "TYVideoPlayerDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -414,6 +481,7 @@
 				2B11F77C1D17888000BFA5DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -40,20 +40,21 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerTrackType) {
 
 @interface TYVideoPlayerTrack : NSObject<TYVideoPlayerTrack>
 
+// 视频流类型 点播 ，直播
 @property (nonatomic, assign) TYVideoPlayerTrackType videoType;
-
+// 视频地址
 @property (nonatomic, strong) NSURL *streamURL;
-
+// 是否播放结束
 @property (nonatomic, assign) BOOL isPlayedToEnd;
-
+// 是否之前载入过
 @property (nonatomic, assign) BOOL isVideoLoadedBefore;
-
+// 当前播放时间
 @property (nonatomic, assign) NSInteger videoTime;
-
+// 视频总时长
 @property (nonatomic, assign) NSInteger videoDuration;
-
+// 是否继续上次观看
 @property (nonatomic, assign) BOOL videoLoadContinueLastTime;
-
+// 上次视频播放时间位置
 @property (nonatomic, assign) NSInteger lastTimeInSeconds;
 
 - (id)initWithStreamURL:(NSURL*)url;

@@ -10,7 +10,10 @@
 
 @interface TYVideoTitleView : UIView
 
+// 返回 按钮
 @property (nonatomic, weak,readonly) UIButton *backBtn;
+
+// 标题
 @property (nonatomic, weak,readonly) UILabel *titleLabel;
 
 @end

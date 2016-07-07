@@ -111,7 +111,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 @property (nonatomic, strong, readonly) AVPlayerItem* playerItem;
 
-@property (nonatomic, strong, readonly) id<TYVideoPlayerTrack> track;
+@property (nonatomic, strong, readonly) NSObject<TYVideoPlayerTrack> *track;
 
 @property (nonatomic, weak, readonly) UIView<TYPlayerLayer> *playerLayer;
 
@@ -121,18 +121,19 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (instancetype)initWithPlayerLayer:(UIView<TYPlayerLayer> *)playerLayer;
 
+// load thrack
+
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track;
-
-// init
 
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayer:(UIView<TYPlayerLayer> *)playerLayer;
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayer:(UIView<TYPlayerLayer> *)layerView;
 
-// if track videoLoadContinueLastTime YES will continue last watch time
-- (void)reloadCurrentVideoTrack;
+- (void)reloadCurrentVideoTrack; // if track videoLoadContinueLastTime YES will continue last watch time
+
+// video control
 
 - (BOOL)isPlaying;
 
@@ -140,8 +141,9 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)pause;
 
-// stop will clear videoPlayer
-- (void)stop;
+- (void)stop; // stop will clear videoPlayer
+
+// seek
 
 - (void)seekToTime:(NSTimeInterval)time;
 
@@ -149,8 +151,18 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)setRate:(float)rate;
 
+// time
+
 - (NSTimeInterval)currentTime;
 
 - (NSTimeInterval)currentDuration;
+
+// timeout
+
+- (void)setLoadingTimeOutTime:(NSUInteger)time; // 开始加载超时时间
+
+- (void)setSeekTimeOutTime:(NSUInteger)time;    // seek超时时间
+
+- (void)setBufferTimeOutTime:(NSUInteger)time;  // 缓冲超时时间
 
 @end

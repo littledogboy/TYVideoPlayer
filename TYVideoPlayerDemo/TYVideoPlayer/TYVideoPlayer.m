@@ -42,6 +42,10 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 @interface TYVideoPlayer () {
     BOOL _isFinishSeek;
+    
+    NSInteger _loadingTimeOut;
+    NSInteger _seekingTimeOut;
+    NSInteger _bufferingTimeOut;
 }
 
 @property (nonatomic, strong) AVPlayer *player;
@@ -65,6 +69,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 - (instancetype)init
 {
     if (self = [super init]) {
+        
         [self configureVideoPlayer];
     }
     return self;
@@ -73,7 +78,9 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 - (instancetype)initWithPlayerLayer:(UIView<TYPlayerLayer> *)playerLayer
 {
     if (self = [super init]) {
+        
         _playerLayer = playerLayer;
+        
         [self configureVideoPlayer];
     }
     return self;
@@ -83,6 +90,10 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)configureVideoPlayer
 {
+    _bufferingTimeOut = 60;
+    _seekingTimeOut = 60;
+    _loadingTimeOut = 60;
+    
     _state = TYVideoPlayerStateUnknown;
     
     [self addRouteObservers];
@@ -183,13 +194,13 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
             }
             break;
         case TYVideoPlayerStateContentLoading:
-             [self performSelector:@selector(URLAssetTimeOut) withObject:nil afterDelay:60];
+             [self performSelector:@selector(URLAssetTimeOut) withObject:nil afterDelay:_loadingTimeOut];
             break;
         case TYVideoPlayerStateSeeking:
-            [self performSelector:@selector(seekingTimeOut) withObject:nil afterDelay:60];
+            [self performSelector:@selector(seekingTimeOut) withObject:nil afterDelay:_seekingTimeOut];
             break;
         case TYVideoPlayerStateBuffering:
-            [self performSelector:@selector(bufferingTimeOut) withObject:nil afterDelay:60];
+            [self performSelector:@selector(bufferingTimeOut) withObject:nil afterDelay:_bufferingTimeOut];
             break;
         case TYVideoPlayerStateContentPlaying:
             if (![self isPlaying]) {
@@ -588,12 +599,10 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)notifyErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
 {
-    dispatch_main_async_safe_ty(^{
-        if ([_delegate respondsToSelector:@selector(videoPlayer:track:receivedErrorCode:error:)]) {
-            TYDLog(@"receivedErrorCode %ld error %@",errorCode,error);
-            [_delegate videoPlayer:self track:_track receivedErrorCode:errorCode error:error];
-        }
-    });
+    if ([_delegate respondsToSelector:@selector(videoPlayer:track:receivedErrorCode:error:)]) {
+        TYDLog(@"receivedErrorCode %ld error %@",errorCode,error);
+        [_delegate videoPlayer:self track:_track receivedErrorCode:errorCode error:error];
+    }
 }
 
 - (void)clearVideoPlayer
@@ -623,6 +632,21 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     if (_state == TYVideoPlayerStateBuffering) {
         [self notifyTimeOut:TYVideoPlayerTimeOutBuffer];
     }
+}
+
+- (void)setLoadingTimeOutTime:(NSUInteger)time
+{
+    _loadingTimeOut = time;
+}
+
+- (void)setSeekTimeOutTime:(NSUInteger)time
+{
+    _seekingTimeOut = time;
+}
+
+- (void)setBufferTimeOutTime:(NSUInteger)time
+{
+    _bufferingTimeOut = time;
 }
 
 - (void)notifyTimeOut:(TYVideoPlayerTimeOut)timeOut

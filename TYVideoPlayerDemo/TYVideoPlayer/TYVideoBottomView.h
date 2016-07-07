@@ -10,10 +10,16 @@
 
 @interface TYVideoBottomView : UIView
 
+// 当前播放时长
 @property (nonatomic, weak, readonly) UILabel *curTimeLabel;
-@property (nonatomic, weak, readonly) UILabel *totalTimeLabel;
-@property (nonatomic, weak, readonly) UIButton *fullScreenBtn;
-@property (nonatomic, weak, readonly) UISlider *progressSlider;
 
+// 总播放时长
+@property (nonatomic, weak, readonly) UILabel *totalTimeLabel;
+
+// 全屏按钮
+@property (nonatomic, weak, readonly) UIButton *fullScreenBtn;
+
+// 进度条
+@property (nonatomic, weak, readonly) UISlider *progressSlider;
 
 @end

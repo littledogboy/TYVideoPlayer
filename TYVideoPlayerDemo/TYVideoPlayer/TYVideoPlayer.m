@@ -197,7 +197,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
             }
             break;
         case TYVideoPlayerStateContentPaused:
-            if (oldState != TYVideoPlayerStateContentLoading) {
+            if (oldState != TYVideoPlayerStateContentLoading && oldState != TYVideoPlayerStateRequestStreamURL) {
                 _track.isVideoLoadedBefore = NO;
                 _track.lastTimeInSeconds = [self currentTime];
             }
@@ -206,15 +206,19 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
         case TYVideoPlayerStateError:
             [self cancleAllTimeOut];
             [_player pause];
+            if (oldState != TYVideoPlayerStateContentLoading && oldState != TYVideoPlayerStateRequestStreamURL) {
+                _track.isVideoLoadedBefore = NO;
+                _track.lastTimeInSeconds = [self currentTime];
+            }
             [self notifyErrorCode:kVideoPlayerErrorAVPlayerFail error:nil];
         case TYVideoPlayerStateStopped:
             [self cancleAllTimeOut];
             [_playerItem cancelPendingSeeks];
-            if (oldState != TYVideoPlayerStateContentLoading) {
+            [_player pause];
+            if (oldState != TYVideoPlayerStateContentLoading && oldState != TYVideoPlayerStateRequestStreamURL) {
                 _track.isVideoLoadedBefore = NO;
                 _track.lastTimeInSeconds = [self currentTime];
             }
-            [_player pause];
             [self clearVideoPlayer];
         default:
             break;
@@ -255,6 +259,12 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 }
 
 #pragma mark - load video URL
+
+- (void)reloadCurrentVideoTrackContinueLastTime:(BOOL)continueLastTime
+{
+    _track.videoLoadContinueLastTime = continueLastTime;
+    [self reloadCurrentVideoTrack];
+}
 
 - (void)reloadCurrentVideoTrack
 {
@@ -386,17 +396,19 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
             NSError *error = nil;
             AVKeyValueStatus status = [URLAsset statusOfValueForKey:kTYVideoPlayerTracksKey error:&error];
             if (status == AVKeyValueStatusLoaded) {
-                    _track.videoType = CMTimeGetSeconds([URLAsset duration]) == 0 ? TYVideoPlayerTrackLIVE : TYVideoPlayerTrackVOD;
-                    _track.videoDuration = CMTimeGetSeconds([URLAsset duration]);
-                    if (_track.lastTimeInSeconds > _track.videoDuration) {
-                        _track.lastTimeInSeconds = 0;
-                    }
+                _track.videoType = CMTimeGetSeconds([URLAsset duration]) == 0 ? TYVideoPlayerTrackLIVE : TYVideoPlayerTrackVOD;
+                _track.videoDuration = CMTimeGetSeconds([URLAsset duration]);
                 
-                    self.playerItem = [AVPlayerItem playerItemWithAsset:URLAsset];
+                self.playerItem = [AVPlayerItem playerItemWithAsset:URLAsset];
+                if (_track.lastTimeInSeconds > _track.videoDuration) {
+                    _track.lastTimeInSeconds = 0;
+                }
+                if (_track.videoLoadContinueLastTime && _track.lastTimeInSeconds > 0) {
                     [_playerItem seekToTime:CMTimeMakeWithSeconds(_track.lastTimeInSeconds, 1)];
-                    self.player = [AVPlayer playerWithPlayerItem:_playerItem];
-                    [_playerLayer setPlayer:_player];
-                    TYDLog(@"setPlayer");
+                }
+                self.player = [AVPlayer playerWithPlayerItem:_playerItem];
+                [_playerLayer setPlayer:_player];
+                TYDLog(@"setPlayer");
             }else if (status == AVKeyValueStatusFailed || status == AVKeyValueStatusUnknown) {
                 [self notifyErrorCode:kVideoPlayerErrorAssetLoadError error:error];
             }
@@ -500,7 +512,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     }
     self.state = TYVideoPlayerStateSeeking;
     __weak typeof(self) weakSelf = self;
-    [self seekToTimeInSecond:time isUserAction:YES completionHandler:^(BOOL finished) {
+    [self seekToTimeInSecond:time completion:^(BOOL finished) {
         if (finished){
             [weakSelf pauseContentCompletion:^{
                 [weakSelf playContent];
@@ -509,10 +521,23 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     }];
 }
 
-- (void)seekToTimeInSecond:(NSTimeInterval)time isUserAction:(BOOL)isUserAction completionHandler:(void (^)(BOOL finished))completionHandler
+- (void)seekToLastWatchTime
+{
+    if (_track.lastTimeInSeconds > _track.videoDuration) {
+        _track.lastTimeInSeconds = 0;
+    }
+    __weak typeof(self) weakSelf = self;
+    [self seekToTimeInSecond:_track.lastTimeInSeconds completion:^(BOOL finished) {
+        if (finished) {
+            [weakSelf playContent];
+        }
+    }];
+}
+
+- (void)seekToTimeInSecond:(NSTimeInterval)time completion:(void (^)(BOOL finished))completion
 {
     _isFinishSeek = NO;
-    [_player seekToTimeInSeconds:time completionHandler:completionHandler];
+    [_player seekToTimeInSeconds:time completionHandler:completion];
 }
 
 #pragma mark - public 

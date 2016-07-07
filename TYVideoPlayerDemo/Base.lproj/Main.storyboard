@@ -17,8 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Atf-ls-kbI">
-                                <rect key="frame" x="266" y="242" width="68" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Atf-ls-kbI">
+                                <rect key="frame" x="266" y="198" width="68" height="30"/>
                                 <state key="normal" title="playVideo"/>
                                 <connections>
                                     <segue destination="zF0-OJ-29c" kind="show" id="751-dL-9OQ"/>
@@ -84,6 +84,13 @@
                                     <action selector="loadTrackAction:" destination="zF0-OJ-29c" eventType="touchUpInside" id="GOz-dH-ggD"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lUp-9i-GSM">
+                                <rect key="frame" x="245" y="337" width="110" height="30"/>
+                                <state key="normal" title="seekToHalfTime"/>
+                                <connections>
+                                    <action selector="seekTimeAction:" destination="zF0-OJ-29c" eventType="touchUpInside" id="gpe-Bp-cJv"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -91,12 +98,14 @@
                             <constraint firstItem="lX1-Df-Ydp" firstAttribute="top" secondItem="EoI-pm-OLb" secondAttribute="bottom" constant="12" id="7AR-ih-HqM"/>
                             <constraint firstItem="ac1-gv-HtR" firstAttribute="top" secondItem="73Q-x4-0MZ" secondAttribute="bottom" constant="20" id="7Em-pA-McQ"/>
                             <constraint firstItem="lX1-Df-Ydp" firstAttribute="centerX" secondItem="Ybz-0Q-zmu" secondAttribute="centerX" id="FvX-c9-GaH"/>
+                            <constraint firstItem="lUp-9i-GSM" firstAttribute="centerX" secondItem="Ybz-0Q-zmu" secondAttribute="centerX" id="GI9-wT-EBr"/>
                             <constraint firstItem="mfT-He-2N7" firstAttribute="centerX" secondItem="Ybz-0Q-zmu" secondAttribute="centerX" id="TLR-yB-w64"/>
                             <constraint firstItem="85t-K2-Vb0" firstAttribute="centerX" secondItem="Ybz-0Q-zmu" secondAttribute="centerX" id="dE1-p6-tyd"/>
                             <constraint firstItem="73Q-x4-0MZ" firstAttribute="top" secondItem="lX1-Df-Ydp" secondAttribute="bottom" constant="12" id="fF6-Sj-WGn"/>
                             <constraint firstItem="mfT-He-2N7" firstAttribute="top" secondItem="85t-K2-Vb0" secondAttribute="bottom" constant="12" id="i5i-t8-uF5"/>
                             <constraint firstItem="EoI-pm-OLb" firstAttribute="top" secondItem="mfT-He-2N7" secondAttribute="bottom" constant="12" id="jlK-1d-JiO"/>
                             <constraint firstItem="EoI-pm-OLb" firstAttribute="centerX" secondItem="Ybz-0Q-zmu" secondAttribute="centerX" id="qog-at-8K7"/>
+                            <constraint firstItem="85t-K2-Vb0" firstAttribute="top" secondItem="lUp-9i-GSM" secondAttribute="bottom" constant="15" id="sus-oz-Td8"/>
                         </constraints>
                     </view>
                 </viewController>

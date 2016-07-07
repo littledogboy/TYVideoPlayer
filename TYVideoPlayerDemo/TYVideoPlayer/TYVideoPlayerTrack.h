@@ -27,6 +27,8 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerTrackType) {
 @property (nonatomic, assign) NSInteger videoTime;
 // 视频总时长
 @property (nonatomic, assign) NSInteger videoDuration;
+// 是否继续上次观看
+@property (nonatomic, assign) BOOL videoLoadContinueLastTime;
 // 上次视频播放时间位置
 @property (nonatomic, assign) NSInteger lastTimeInSeconds;
 
@@ -49,6 +51,8 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerTrackType) {
 @property (nonatomic, assign) NSInteger videoTime;
 
 @property (nonatomic, assign) NSInteger videoDuration;
+
+@property (nonatomic, assign) BOOL videoLoadContinueLastTime;
 
 @property (nonatomic, assign) NSInteger lastTimeInSeconds;
 

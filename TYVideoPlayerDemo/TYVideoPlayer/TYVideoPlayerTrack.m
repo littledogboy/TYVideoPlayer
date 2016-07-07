@@ -25,9 +25,10 @@
 
 - (void)resetTrack
 {
-    self.isPlayedToEnd = NO;
-    self.isVideoLoadedBefore = NO;
-    self.lastTimeInSeconds = 0;
+    _videoLoadContinueLastTime = NO;
+    _isPlayedToEnd = NO;
+    _isVideoLoadedBefore = NO;
+    _lastTimeInSeconds = 0;
 }
 
 @end

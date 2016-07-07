@@ -7,7 +7,6 @@
 //
 
 #import "SimpleVideoViewController.h"
-
 #import "TYVideoPlayer.h"
 #import "TYVideoPlayerView.h"
 
@@ -79,6 +78,9 @@
     [_videoPlayer stop];
     [self.navigationController popViewControllerAnimated:YES];
 }
+- (IBAction)seekTimeAction:(id)sender {
+    [_videoPlayer seekToTime:(int)_videoPlayer.currentDuration/2];
+}
 
 #pragma mark - TYVideoPlayerDelegate
 
@@ -86,6 +88,7 @@
 {
     switch (videoPlayer.state) {
         case TYVideoPlayerStateContentReadyToPlay:
+            //[videoPlayer seekToLastWatchTime];
             [videoPlayer play];
             break;
             

@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "TYPlayerLayerView.h"
+#import "TYVideoControlView.h"
 
 @interface TYVideoPlayerView : UIView
 
 @property (nonatomic, weak, readonly) TYPlayerLayerView *layerView;
+@property (nonatomic, weak, readonly) TYVideoControlView *controlView;
 
 @end

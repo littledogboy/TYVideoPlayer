@@ -150,7 +150,6 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)seekToLastWatchTime;
 
-
 // time
 
 - (NSTimeInterval)currentTime;

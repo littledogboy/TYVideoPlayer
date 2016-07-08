@@ -42,7 +42,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 @interface TYVideoPlayer () {
     
-    BOOL _isFinishSeek;
+    BOOL _isEndToSeek;
     
     NSInteger _loadingTimeOut;
     NSInteger _seekingTimeOut;
@@ -53,7 +53,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 @property (nonatomic, strong) AVPlayerItem* playerItem;
 
-@property (nonatomic, strong) id<TYVideoPlayerTrack> track;
+@property (nonatomic, strong) NSObject<TYVideoPlayerTrack> *track;
 
 @property (nonatomic, weak) UIView<TYPlayerLayer> *playerLayerView;
 
@@ -548,7 +548,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)seekToTimeInSecond:(NSTimeInterval)time completion:(void (^)(BOOL finished))completion
 {
-    _isFinishSeek = NO;
+    _isEndToSeek = NO;
     [_player seekToTime:CMTimeMakeWithSeconds(time, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:completion];
 }
 
@@ -732,7 +732,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
         }else if ([keyPath isEqualToString:kTYVideoPlayerLikelyToKeepUpKey]) {
             TYDLog(@"playbackLikelyToKeepUp");
             if (_playerItem.playbackLikelyToKeepUp) {
-                _isFinishSeek = YES;
+                _isEndToSeek = YES;
                 if (![self isPlaying] && _state == TYVideoPlayerStateContentPlaying) {
                     [_player play];
                 }

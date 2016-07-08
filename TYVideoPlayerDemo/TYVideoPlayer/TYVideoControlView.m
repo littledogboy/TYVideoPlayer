@@ -37,7 +37,7 @@
         
         [self addBottomView];
         
-        //[self addSuspendButton];
+        [self addSuspendButton];
     }
     return self;
 }
@@ -50,7 +50,7 @@
         
         [self addBottomView];
         
-        //[self addSuspendButton];
+        [self addSuspendButton];
     }
     return self;
 }

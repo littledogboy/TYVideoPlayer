@@ -104,7 +104,9 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)setPlayerItem:(AVPlayerItem *)playerItem
 {
-    [self removePlayerItemObservers:_playerItem];
+    if (_playerItem) {
+        [self removePlayerItemObservers:_playerItem];
+    }
     
     _playerItem = playerItem;
     if (!playerItem) {
@@ -119,14 +121,15 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     self.timeObserver = nil;
     if (_player) {
         [_player replaceCurrentItemWithPlayerItem:nil];
-        [_player removeObserver:self forKeyPath:@"status"];
+        [_player removeObserver:self forKeyPath:kTYVideoPlayerStatusKey];
     }
     
     _player = player;
-    if (player) {
-        [player addObserver:self forKeyPath:@"status" options:0 context:nil];
-        [self addPlayerTimeObserver];
+    if (!player) {
+        return;
     }
+    [player addObserver:self forKeyPath:kTYVideoPlayerStatusKey options:NSKeyValueObservingOptionNew context:nil];
+    [self addPlayerTimeObserver];
 }
 
 - (void)setTimeObserver:(id)timeObserver
@@ -828,6 +831,8 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)dealloc
 {
+    [self clearVideoPlayer];
+    
     TYDLog(@"TYVideoPlayer dealloc");
 }
 

@@ -1,20 +1,23 @@
 //
-//  TYPlayerLayerView.h
+//  TYVideoPlayeProtocol.h
 //  TYVideoPlayerDemo
 //
-//  Created by tany on 16/6/23.
+//  Created by tany on 16/7/8.
 //  Copyright © 2016年 tany. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "TYPlayerLayerProtocol.h"
+#import <AVFoundation/AVFoundation.h>
 
-@interface TYPlayerLayerView : UIView<TYPlayerLayer>
+/**
+ *  TYPlayerLayer Protocol
+ */
+@protocol TYPlayerLayer <NSObject>
 
 - (AVPlayerLayer *)playerLayer;
-
-- (AVPlayer *)player;
 
 - (void)setPlayer:(AVPlayer *)player;
 
 @end
+
+

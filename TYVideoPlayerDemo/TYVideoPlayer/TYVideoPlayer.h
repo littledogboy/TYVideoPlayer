@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AVPlayer+TYPlayer.h"
 #import "TYVideoPlayerTrack.h"
-#import "TYPlayerLayerView.h"
+#import "TYPlayerLayerProtocol.h"
 
 // 播放错误码
 typedef NS_ENUM(NSUInteger, TYVideoPlayerErrorCode) {
@@ -157,7 +157,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (NSTimeInterval)currentDuration;
 
-// timeout
+// timeout time
 
 - (void)setLoadingTimeOutTime:(NSUInteger)time; // 开始加载超时时间
 

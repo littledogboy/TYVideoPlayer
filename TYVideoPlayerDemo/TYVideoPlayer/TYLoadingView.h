@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TCircleLoadingView : UIView
+@interface TYLoadingView : UIView
 
 //default is 1.0f
 @property (nonatomic, assign) CGFloat lineWidth;

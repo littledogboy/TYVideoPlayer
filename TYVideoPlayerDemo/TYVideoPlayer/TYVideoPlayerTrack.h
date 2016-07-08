@@ -13,6 +13,9 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerTrackType) {
     TYVideoPlayerTrackLIVE,// 直播
 };
 
+/**
+ *  TYVideoPlayerTrack Protocol
+ */
 @protocol TYVideoPlayerTrack <NSObject>
 
 // 视频流类型 点播 ，直播

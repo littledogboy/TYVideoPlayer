@@ -5,11 +5,11 @@
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TCircleLoadingView.h"
+#import "TYLoadingView.h"
 
 #define ANGLE(a) 2*M_PI/360*a
 
-@interface TCircleLoadingView ()
+@interface TYLoadingView ()
 
 //0.0 - 1.0
 @property (nonatomic, assign) CGFloat anglePer;
@@ -19,16 +19,25 @@
 
 @end
 
-@implementation TCircleLoadingView
+@implementation TYLoadingView
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         self.userInteractionEnabled = NO;
         _lineColor = [UIColor whiteColor];
 
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        self.backgroundColor = [UIColor clearColor];
+        self.userInteractionEnabled = NO;
+        _lineColor = [UIColor whiteColor];
     }
     return self;
 }

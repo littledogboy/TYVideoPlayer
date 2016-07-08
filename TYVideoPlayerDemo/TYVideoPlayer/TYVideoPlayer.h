@@ -112,13 +112,13 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 @property (nonatomic, strong, readonly) NSObject<TYVideoPlayerTrack> *track;
 
-@property (nonatomic, weak, readonly) UIView<TYPlayerLayer> *playerLayer;
+@property (nonatomic, weak, readonly) UIView<TYPlayerLayer> *playerLayerView;
 
 @property (nonatomic, assign, readonly) TYVideoPlayerState state;
 
 @property (nonatomic, weak) id<TYVideoPlayerDelegate> delegate;
 
-- (instancetype)initWithPlayerLayer:(UIView<TYPlayerLayer> *)playerLayer;
+- (instancetype)initWithPlayerLayerView:(UIView<TYPlayerLayer> *)playerLayerView;
 
 // load thrack
 
@@ -126,13 +126,15 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track;
 
-- (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayer:(UIView<TYPlayerLayer> *)playerLayer;
+- (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView;
 
-- (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayer:(UIView<TYPlayerLayer> *)layerView;
+- (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView;
 
 - (void)reloadCurrentVideoTrack; // if track videoLoadContinueLastTime YES will continue last watch time
 
 // video control
+
+- (void)setRate:(float)rate;
 
 - (BOOL)isPlaying;
 
@@ -148,7 +150,6 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)seekToLastWatchTime;
 
-- (void)setRate:(float)rate;
 
 // time
 
@@ -156,7 +157,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (NSTimeInterval)currentDuration;
 
-// timeout time
+// timeout time, default 60s
 
 - (void)setLoadingTimeOutTime:(NSUInteger)time; // 开始加载超时时间
 

@@ -41,6 +41,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 
 @interface TYVideoPlayer () {
+    
     BOOL _isFinishSeek;
     
     NSInteger _loadingTimeOut;
@@ -54,7 +55,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 @property (nonatomic, strong) id<TYVideoPlayerTrack> track;
 
-@property (nonatomic, weak) UIView<TYPlayerLayer> *playerLayer;
+@property (nonatomic, weak) UIView<TYPlayerLayer> *playerLayerView;
 
 @property (nonatomic, assign) TYVideoPlayerState state;
 
@@ -75,11 +76,11 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     return self;
 }
 
-- (instancetype)initWithPlayerLayer:(UIView<TYPlayerLayer> *)playerLayer
+- (instancetype)initWithPlayerLayerView:(UIView<TYPlayerLayer> *)playerLayerView
 {
     if (self = [super init]) {
         
-        _playerLayer = playerLayer;
+        _playerLayerView = playerLayerView;
         
         [self configureVideoPlayer];
     }
@@ -298,28 +299,28 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL
 {
-    [self loadVideoWithStreamURL:streamURL playerLayer:nil];
+    [self loadVideoWithStreamURL:streamURL playerLayerView:nil];
 }
 
-- (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayer:(UIView<TYPlayerLayer> *)playerLayer
+- (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView
 {
     TYVideoPlayerTrack *track = [[TYVideoPlayerTrack alloc]initWithStreamURL:streamURL];
-    [self loadVideoWithTrack:track playerLayer:playerLayer];
+    [self loadVideoWithTrack:track playerLayerView:playerLayerView];
 }
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track
 {
-    [self loadVideoWithTrack:track playerLayer:nil];
+    [self loadVideoWithTrack:track playerLayerView:nil];
 }
 
-- (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayer:(UIView<TYPlayerLayer> *)playerLayer
+- (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView
 {
     if (_track && _state != TYVideoPlayerStateError) {
         [self stop];
     }
     
-    if (playerLayer) {
-        _playerLayer = playerLayer;
+    if (playerLayerView) {
+        _playerLayerView = playerLayerView;
     }
     self.track = track;
     self.track.isPlayedToEnd = NO;
@@ -364,7 +365,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
             return;
         }
         TYDLog(@"playVideoWithStreamURL %@",url);
-        [weakSelf playVideoWithStreamURL:url playerLayerView:weakSelf.playerLayer];
+        [weakSelf playVideoWithStreamURL:url playerLayerView:weakSelf.playerLayerView];
     }];
 }
 
@@ -418,7 +419,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
                     [_playerItem seekToTime:CMTimeMakeWithSeconds(_track.lastTimeInSeconds, 1)];
                 }
                 self.player = [AVPlayer playerWithPlayerItem:_playerItem];
-                [_playerLayer setPlayer:_player];
+                [_playerLayerView setPlayer:_player];
                 TYDLog(@"setPlayer");
             }else if (status == AVKeyValueStatusFailed || status == AVKeyValueStatusUnknown) {
                 [self notifyErrorCode:kVideoPlayerErrorAssetLoadError error:error];

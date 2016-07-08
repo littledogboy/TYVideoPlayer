@@ -7,12 +7,14 @@
 //  播放器播放层
 
 #import <UIKit/UIKit.h>
-#import "TYPlayerLayerView.h"
-#import "TYVideoControlView.h"
+#import "TYPlayerLayerProtocol.h"
 
-@interface TYVideoPlayerView : UIView
+@interface TYVideoPlayerView : UIView<TYPlayerLayer>
 
-@property (nonatomic, weak, readonly) TYPlayerLayerView *layerView;
-@property (nonatomic, weak, readonly) TYVideoControlView *controlView;
+- (AVPlayerLayer *)playerLayer;
+
+- (AVPlayer *)player;
+
+- (void)setPlayer:(AVPlayer *)player;
 
 @end

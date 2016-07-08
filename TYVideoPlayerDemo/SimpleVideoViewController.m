@@ -52,7 +52,7 @@
 - (void)loadVideo
 {
     NSURL *streamURL = [NSURL URLWithString:@"http://down.233.com/2014_2015/2014/jzs1/jingji_zhenti_yjw/6-qllgl2v5x9b80vvgwgzzlnzydkj1bpr66hnool80.mp4"];
-    [_videoPlayer loadVideoWithStreamURL:streamURL playerLayer:_playerView.layerView];
+    [_videoPlayer loadVideoWithStreamURL:streamURL playerLayerView:_playerView];
     _videoPlayer.track.videoLoadContinueLastTime = YES;
 }
 

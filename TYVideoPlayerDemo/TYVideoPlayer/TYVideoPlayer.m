@@ -548,7 +548,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 - (void)seekToTimeInSecond:(NSTimeInterval)time completion:(void (^)(BOOL finished))completion
 {
     _isFinishSeek = NO;
-    [_player seekToTimeInSeconds:time completionHandler:completion];
+    [_player seekToTime:CMTimeMakeWithSeconds(time, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:completion];
 }
 
 #pragma mark - public 
@@ -571,13 +571,13 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
         _track.isVideoLoadedBefore = NO;
         return MIN(_track.lastTimeInSeconds, 0);
     }else{
-        return CMTimeGetSeconds([self.player currentCMTime]);
+        return CMTimeGetSeconds([self.player currentTime]);
     }
 }
 
 - (NSTimeInterval)currentDuration
 {
-    return [self.player currentItemDuration];
+    return CMTimeGetSeconds([self.player.currentItem duration]);
 }
 
 #pragma mark - private method
@@ -725,7 +725,6 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     }else if (object == _playerItem) {
         if ([keyPath isEqualToString:kTYVideoPlayerBufferEmptyKey]) {
             TYDLog(@"playbackBufferEmpty");
-             // TODO 这里判断可能还不太准确
             if (self.playerItem.isPlaybackBufferEmpty && [self currentTime] > 0 && [self currentTime] < [self currentDuration] - 1 && _state == TYVideoPlayerStateContentPlaying) {
                 self.state = TYVideoPlayerStateBuffering;
             }

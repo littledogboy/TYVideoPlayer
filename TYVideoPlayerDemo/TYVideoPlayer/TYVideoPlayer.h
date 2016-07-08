@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AVPlayer+TYPlayer.h"
 #import "TYVideoPlayerTrack.h"
 #import "TYPlayerLayerProtocol.h"
 

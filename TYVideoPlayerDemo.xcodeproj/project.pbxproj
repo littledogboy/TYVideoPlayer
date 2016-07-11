@@ -23,6 +23,7 @@
 		2B59ACF71D2B936000B10FB4 /* TYVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACF61D2B936000B10FB4 /* TYVideoPlayerView.m */; };
 		2B59ACFA1D2B93E800B10FB4 /* TYVideoControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACF91D2B93E800B10FB4 /* TYVideoControlView.m */; };
 		2B59ACFD1D2BA80300B10FB4 /* SimpleVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */; };
+		2B86F56E1D333C180057CC18 /* VideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B86F56D1D333C180057CC18 /* VideoPlayerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		2B59ACF91D2B93E800B10FB4 /* TYVideoControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoControlView.m; sourceTree = "<group>"; };
 		2B59ACFB1D2BA80300B10FB4 /* SimpleVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleVideoViewController.h; sourceTree = "<group>"; };
 		2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleVideoViewController.m; sourceTree = "<group>"; };
+		2B86F56C1D333C180057CC18 /* VideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayerViewController.h; sourceTree = "<group>"; };
+		2B86F56D1D333C180057CC18 /* VideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +128,8 @@
 				2B11F75F1D17888000BFA5DF /* ViewController.m */,
 				2B59ACFB1D2BA80300B10FB4 /* SimpleVideoViewController.h */,
 				2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */,
+				2B86F56C1D333C180057CC18 /* VideoPlayerViewController.h */,
+				2B86F56D1D333C180057CC18 /* VideoPlayerViewController.m */,
 				2B11F7611D17888000BFA5DF /* Main.storyboard */,
 				2B11F7641D17888000BFA5DF /* Assets.xcassets */,
 				2B11F7661D17888000BFA5DF /* LaunchScreen.storyboard */,
@@ -295,6 +300,7 @@
 				2B59ACFD1D2BA80300B10FB4 /* SimpleVideoViewController.m in Sources */,
 				2B11F7601D17888000BFA5DF /* ViewController.m in Sources */,
 				2B1A01E31D2E0662007D3984 /* TYVideoBottomView.m in Sources */,
+				2B86F56E1D333C180057CC18 /* VideoPlayerViewController.m in Sources */,
 				2B1A01E01D2E065A007D3984 /* TYVideoTitleView.m in Sources */,
 				2B11F75D1D17888000BFA5DF /* AppDelegate.m in Sources */,
 				2B1A01E61D2E0668007D3984 /* TYLoadingView.m in Sources */,

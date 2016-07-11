@@ -802,7 +802,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
         if ([portDescription.portType isEqualToString:@"Headphones"]) {
             //如果是在播放状态下拔出耳机，导致系统级暂停播放，而播放状态未改变
             dispatch_delay_main_async_ty(0.3,^{
-                if (self.state == TYVideoPlayerStateContentPlaying) {//只有在播放状态下才恢复播放
+                if (_state == TYVideoPlayerStateContentPlaying) {//只有在播放状态下才恢复播放
                     [self play];
                 }
             });
@@ -815,11 +815,11 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     NSDictionary *dic=notification.userInfo;
     int changeReason= [dic[AVAudioSessionRouteChangeReasonKey] intValue];
     if (changeReason==AVAudioSessionRouteChangeReasonUnknown) {
-        if (self.state == TYVideoPlayerStateContentPlaying) {
+        if (_state == TYVideoPlayerStateContentPlaying) {
             [self pauseContent];
         }
         // TODO 有来电则不恢复播放
-        if (self.track.isPlayedToEnd) {
+        if (_track.isPlayedToEnd) {
             return;
         }
         //1秒后恢复播放，立即恢复会导致无法播放卡顿

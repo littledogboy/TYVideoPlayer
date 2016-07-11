@@ -8,6 +8,27 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, TVVideoControlEvent) {
+    TVVideoControlEventBack,
+    TVVideoControlEventNomarlScreen,
+    TVVideoControlEventFullScreen,
+    TVVideoControlEventPlay,
+    TVVideoControlEventSuspend
+};
+
+@class TYVideoControlView;
+@protocol TYVideoControlViewDelegate <NSObject>
+
+@optional
+
+- (void)videoControlView:(TYVideoControlView *)videoControlView recieveControlEvent:(TVVideoControlEvent)event;
+
+- (void)videoControlView:(TYVideoControlView *)videoControlView sliderToProgress:(CGFloat)progress;
+
+@end
+
 @interface TYVideoControlView : UIView
+
+@property (nonatomic, weak) id<TYVideoControlViewDelegate> delegate;
 
 @end

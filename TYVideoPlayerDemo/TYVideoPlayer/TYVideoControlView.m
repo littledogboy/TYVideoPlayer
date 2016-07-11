@@ -100,21 +100,30 @@
 {
     NSLog(@"sliderEndDraging");
     //_isDragSlider = NO;
+    if ([_delegate respondsToSelector:@selector(videoControlView:sliderToProgress:)]) {
+        [_delegate videoControlView:self sliderToProgress:sender.value];
+    }
 }
 
 - (void)fullScreenAction:(UIButton *)sender
 {
-    
+    if ([_delegate respondsToSelector:@selector(videoControlView:recieveControlEvent:)]) {
+        [_delegate videoControlView:self recieveControlEvent:TVVideoControlEventFullScreen];
+    }
 }
 
 - (void)backAction:(UIButton *)sender
 {
-    
+    if ([_delegate respondsToSelector:@selector(videoControlView:recieveControlEvent:)]) {
+        [_delegate videoControlView:self recieveControlEvent:TVVideoControlEventBack];
+    }
 }
 
 - (void)suspendAction:(UIButton *)sender
 {
-    
+    if ([_delegate respondsToSelector:@selector(videoControlView:recieveControlEvent:)]) {
+        [_delegate videoControlView:self recieveControlEvent:sender.isSelected ? TVVideoControlEventPlay:TVVideoControlEventSuspend];
+    }
 }
 
 - (void)layoutSubviews
@@ -123,6 +132,7 @@
     
     _titleView.frame = CGRectMake(0, kTitleViewTopEdge, CGRectGetWidth(self.frame), kTitleViewHight);
     _bottomView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - kBottomViewHeight - kBottomViewBottomEdge, CGRectGetWidth(self.frame), kBottomViewHeight);
+    _suspendBtn.center = self.center;
 }
 
 @end

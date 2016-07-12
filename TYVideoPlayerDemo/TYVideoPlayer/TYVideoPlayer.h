@@ -100,7 +100,6 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 // 播放出错
 - (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error;
 
-
 @end
 
 // 视频播放类

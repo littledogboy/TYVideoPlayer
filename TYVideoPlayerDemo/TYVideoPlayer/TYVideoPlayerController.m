@@ -222,7 +222,6 @@
 }
 
 // show errorView
-
 - (void)showErrorViewWithTitle:(NSString *)title btnMsg:(NSString *)btnMsg action:(SEL)action;
 {
     if (!_errorView) {

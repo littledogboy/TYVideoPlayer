@@ -16,12 +16,12 @@
 @property (nonatomic, strong) NSURL *streamURL;
 // 加载完视频是否自动播放
 @property (nonatomic, assign) BOOL loadVideoShouldAutoplay;
-
+// 是否全屏
 @property (nonatomic, assign, readonly) BOOL isFullScreen;
 // 返回， 默认nil，pop或者dismiss
 @property (nonatomic, copy) void (^goBackHandle)(TYVideoPlayerController *);
 
-// 加载视频streamURL ， 注意：如果在viewDidLoad之前设置了streamURL 在viewDidLoad中将会自动调用这个
+// 加载视频streamURL ，如果在viewDidLoad之前设置了streamURL 在viewDidLoad中将会自动调用这个
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;
 
 - (void)play;

@@ -16,17 +16,14 @@
 
 // 播放视图层
 @property (nonatomic, weak) TYVideoPlayerView *playerView;
-
 // 播放控制层
 @property (nonatomic, weak) TYVideoControlView *controlView;
-
+// 播放loading
 @property (nonatomic, weak) TYLoadingView *loadingView;
-
 // 播放器
 @property (nonatomic, strong) TYVideoPlayer *videoPlayer;
 
-@property (nonatomic, strong) NSURL *streamURL;
-
+// 是否正在拖动slider
 @property (nonatomic, assign) BOOL isDraging;
 
 @end
@@ -69,6 +66,10 @@
     [self addSingleTapGesture];
     
     [self addVideoPlayer];
+    
+    if (_streamURL) {
+        [self loadVideoWithStreamURL:_streamURL];
+    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -93,6 +94,7 @@
 - (void)addVideoControlView
 {
     TYVideoControlView *controlView = [[TYVideoControlView alloc]init];
+    [controlView setTitle:_videoTitle];
     controlView.delegate = self;
     [self.view addSubview:controlView];
     _controlView = controlView;
@@ -179,7 +181,7 @@
         case TYVideoPlayerStateContentReadyToPlay:
         {
             NSString *time = [self covertToStringWithTime:[_videoPlayer duration]];
-            [_controlView updateTotalVideoTime:time];
+            [_controlView setTotalVideoTime:time];
             [self hideControlViewWithDelay:5.0];
             break;
         }
@@ -282,11 +284,15 @@
     }
 }
 
-- (void)navBack
+- (void)goBack
 {
-    [self stop];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self stop];
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 #pragma mark - TYVideoPlayerDelegate
 
@@ -306,7 +312,7 @@
     }
     
     NSString *time = [self covertToStringWithTime:playTime];
-    [_controlView updateCurrentVideoTime:time];
+    [_controlView setCurrentVideoTime:time];
 }
 
 #pragma mark - TYVideoControlViewDelegate
@@ -330,7 +336,7 @@
             if (self.isFullScreen){
                 [self changeToOrientation:UIInterfaceOrientationPortrait];
             }else {
-                [self navBack];
+                [self goBack];
             }
             break;
         case TYVideoControlEventFullScreen:
@@ -360,7 +366,7 @@
         {
             NSTimeInterval sliderTime = [_videoPlayer duration]*progress;
             NSString *time = [self covertToStringWithTime:sliderTime];
-            [_controlView updateCurrentVideoTime:time];
+            [_controlView setCurrentVideoTime:time];
             break;
         }
         case TYSliderStateEnd:
@@ -369,7 +375,7 @@
             NSTimeInterval sliderTime = [_videoPlayer duration]*progress;
             NSString *time = [self covertToStringWithTime:sliderTime];
             [_videoPlayer seekToTime:sliderTime];
-            [_controlView updateCurrentVideoTime:time];
+            [_controlView setCurrentVideoTime:time];
             [self hideControlViewWithAnimation:YES];
             break;
         }

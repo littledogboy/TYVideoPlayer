@@ -41,8 +41,10 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 
 @property (nonatomic, weak) id<TYVideoControlViewDelegate> delegate;
 
-- (void)updateTotalVideoTime:(NSString *)time;
+- (void)setTitle:(NSString *)title;
 
-- (void)updateCurrentVideoTime:(NSString *)time;
+- (void)setTotalVideoTime:(NSString *)time;
+
+- (void)setCurrentVideoTime:(NSString *)time;
 
 @end

@@ -13,13 +13,13 @@
 // 视频名 默认YES
 @property (nonatomic, strong) NSString *videoTitle;
 // 播放地址
-@property (nonatomic, strong, readonly) NSURL *streamURL;
+@property (nonatomic, strong) NSURL *streamURL;
 // 加载完视频是否自动播放
 @property (nonatomic, assign) BOOL loadVideoShouldAutoplay;
 
 @property (nonatomic, assign, readonly) BOOL isFullScreen;
 
-// 加载视频
+// 加载视频streamURL ， 注意：如果在viewDidLoad之前设置了streamURL 在viewDidLoad中将会自动调用这个
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;
 
 - (void)play;

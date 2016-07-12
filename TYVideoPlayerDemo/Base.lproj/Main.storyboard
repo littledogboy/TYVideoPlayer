@@ -18,23 +18,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Atf-ls-kbI">
-                                <rect key="frame" x="237" y="198" width="127" height="30"/>
+                                <rect key="frame" x="237" y="140" width="127" height="30"/>
                                 <state key="normal" title="play Sample Video"/>
                                 <connections>
                                     <segue destination="zF0-OJ-29c" kind="show" id="751-dL-9OQ"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pp-BD-Hty">
-                                <rect key="frame" x="241" y="256" width="118" height="30"/>
+                                <rect key="frame" x="241" y="198" width="118" height="30"/>
                                 <state key="normal" title="play Player Video"/>
                                 <connections>
                                     <segue destination="HmK-Mh-yNO" kind="show" id="Vgw-ab-3UQ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PwP-9R-q3c">
+                                <rect key="frame" x="229" y="258" width="142" height="30"/>
+                                <state key="normal" title="present Player Video"/>
+                                <connections>
+                                    <action selector="presentVideoPlayerController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UkJ-yz-j4d"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Atf-ls-kbI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="178" id="P7E-aU-goC"/>
+                            <constraint firstItem="PwP-9R-q3c" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Kh3-u9-2Fh"/>
+                            <constraint firstItem="Atf-ls-kbI" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="120" id="P7E-aU-goC"/>
+                            <constraint firstItem="PwP-9R-q3c" firstAttribute="top" secondItem="5pp-BD-Hty" secondAttribute="bottom" constant="30" id="T1F-HS-3EZ"/>
                             <constraint firstItem="5pp-BD-Hty" firstAttribute="top" secondItem="Atf-ls-kbI" secondAttribute="bottom" constant="28" id="iAz-Iv-gkm"/>
                             <constraint firstItem="5pp-BD-Hty" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oih-hv-RbY"/>
                             <constraint firstItem="Atf-ls-kbI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="uIX-VZ-lJk"/>

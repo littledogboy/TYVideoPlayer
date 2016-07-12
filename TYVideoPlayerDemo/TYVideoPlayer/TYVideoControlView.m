@@ -112,12 +112,17 @@
 
 #pragma mark - public
 
-- (void)updateCurrentVideoTime:(NSString *)time
+- (void)setTitle:(NSString *)title
+{
+    _titleView.titleLabel.text = title;
+}
+
+- (void)setCurrentVideoTime:(NSString *)time
 {
     _bottomView.curTimeLabel.text = time;
 }
 
-- (void)updateTotalVideoTime:(NSString *)time
+- (void)setTotalVideoTime:(NSString *)time
 {
     _bottomView.totalTimeLabel.text = time;
 }

@@ -370,6 +370,7 @@
             NSString *time = [self covertToStringWithTime:sliderTime];
             [_videoPlayer seekToTime:sliderTime];
             [_controlView updateCurrentVideoTime:time];
+            [self hideControlViewWithAnimation:YES];
             break;
         }
         default:

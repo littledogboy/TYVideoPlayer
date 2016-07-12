@@ -11,6 +11,7 @@
 #import "TYVideoPlayerView.h"
 #import "TYVideoControlView.h"
 #import "TYLoadingView.h"
+#import "TYVideoErrorView.h"
 
 @interface TYVideoPlayerController () <TYVideoPlayerDelegate, TYVideoControlViewDelegate>
 
@@ -20,6 +21,9 @@
 @property (nonatomic, weak) TYVideoControlView *controlView;
 // 播放loading
 @property (nonatomic, weak) TYLoadingView *loadingView;
+// 播放错误view
+@property (nonatomic, weak) TYVideoErrorView *errorView;
+
 // 播放器
 @property (nonatomic, strong) TYVideoPlayer *videoPlayer;
 
@@ -154,8 +158,9 @@
     [_videoPlayer stop];
 }
 
-#pragma mark - private
+#pragma mark - show & hide view
 
+// show loadingView
 - (void)showLoadingView
 {
     if (!_loadingView.isAnimating) {
@@ -172,57 +177,7 @@
     }
 }
 
-- (void)updatePlayerViewDidChangeToState:(TYVideoPlayerState)state
-{
-    switch (state) {
-        case TYVideoPlayerStateRequestStreamURL:
-            [self showLoadingView];
-            break;
-        case TYVideoPlayerStateContentReadyToPlay:
-        {
-            NSString *time = [self covertToStringWithTime:[_videoPlayer duration]];
-            [_controlView setTotalVideoTime:time];
-            [self hideControlViewWithDelay:5.0];
-            break;
-        }
-        case TYVideoPlayerStateContentPlaying:
-            _controlView.suspendBtn.selected = NO;
-            [self stopLoadingView];
-            break;
-        case TYVideoPlayerStateContentPaused:
-            _controlView.suspendBtn.selected = YES;
-            break;
-        case TYVideoPlayerStateSeeking:
-            [self showLoadingView];;
-            break;
-        case TYVideoPlayerStateBuffering:
-            [self showLoadingView];;
-            break;
-        case TYVideoPlayerStateStopped:
-            [self stopLoadingView];
-            break;
-        case TYVideoPlayerStateError:
-            [self stopLoadingView];
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)player:(TYVideoPlayer*)videoPlayer didChangeToState:(TYVideoPlayerState)state
-{
-    // player control
-    switch (state) {
-        case TYVideoPlayerStateContentReadyToPlay:
-            if (_loadVideoShouldAutoplay) {
-                [videoPlayer play];
-            }
-            break;
-        default:
-            break;
-    }
-}
-
+// show ControlView
 - (void)showControlViewWithAnimation:(BOOL)animation
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
@@ -266,6 +221,89 @@
     };
 }
 
+// show errorView
+
+- (void)showErrorViewWithTitle:(NSString *)title btnMsg:(NSString *)btnMsg action:(SEL)action;
+{
+    if (!_errorView) {
+        TYVideoErrorView *errorView = [[TYVideoErrorView alloc]initWithFrame:self.view.bounds];
+        errorView.backgroundColor = [UIColor blackColor];
+        [self.view addSubview:errorView];
+        _errorView = errorView;
+    }
+    _errorView.msgBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+    [_errorView.msgBtn setTitle:btnMsg forState:UIControlStateNormal];
+    [_errorView.msgBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    _errorView.titleLabel.text = title;
+}
+
+- (void)hideErrorView
+{
+    if (_errorView) {
+        [_errorView removeFromSuperview];
+    }
+}
+
+#pragma mark - private
+
+- (void)playerViewDidChangeToState:(TYVideoPlayerState)state
+{
+    switch (state) {
+        case TYVideoPlayerStateRequestStreamURL:
+            [_controlView setSliderProgress:0];
+            [_controlView setCurrentVideoTime:@"00:00"];
+            [_controlView setTotalVideoTime:@"00:00"];
+            [self showLoadingView];
+            break;
+        case TYVideoPlayerStateContentReadyToPlay:
+        {
+            NSString *time = [self covertToStringWithTime:[_videoPlayer duration]];
+            [_controlView setTotalVideoTime:time];
+            [self hideControlViewWithDelay:5.0];
+            break;
+        }
+        case TYVideoPlayerStateContentPlaying:
+            _controlView.suspendBtn.selected = NO;
+            [self stopLoadingView];
+            _controlView.suspendBtn.hidden = NO;
+            break;
+        case TYVideoPlayerStateContentPaused:
+            _controlView.suspendBtn.selected = YES;
+            break;
+        case TYVideoPlayerStateSeeking:
+            [self showLoadingView];;
+            break;
+        case TYVideoPlayerStateBuffering:
+            [self showLoadingView];;
+            break;
+        case TYVideoPlayerStateStopped:
+            [self stopLoadingView];
+            _controlView.suspendBtn.hidden = YES;
+            break;
+        case TYVideoPlayerStateError:
+            [self stopLoadingView];
+            _controlView.suspendBtn.hidden = YES;
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)player:(TYVideoPlayer*)videoPlayer didChangeToState:(TYVideoPlayerState)state
+{
+    // player control
+    switch (state) {
+        case TYVideoPlayerStateContentReadyToPlay:
+            if (_loadVideoShouldAutoplay) {
+                [videoPlayer play];
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+
 - (NSString *)covertToStringWithTime:(NSInteger)time
 {
     NSInteger seconds = time % 60;
@@ -274,6 +312,19 @@
 }
 
 #pragma mark - action
+
+- (void)reloadVideo
+{
+    [self loadVideoWithStreamURL:_streamURL];
+    [self hideErrorView];
+}
+
+- (void)reloadCurrentVideo
+{
+    self.videoPlayer.track.continueLastWatchTime = YES;
+    [self.videoPlayer reloadCurrentVideoTrack];
+    [self hideErrorView];
+}
 
 - (void)singleTapAction:(UITapGestureRecognizer *)tap
 {
@@ -288,7 +339,9 @@
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
     [self stop];
-    if (self.navigationController) {
+    if (_goBackHandle) {
+        _goBackHandle(self);
+    }else if (self.navigationController) {
         [self.navigationController popViewControllerAnimated:YES];
     }else {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -299,7 +352,7 @@
 - (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeFromState:(TYVideoPlayerState)fromState
 {
     // update UI
-    [self updatePlayerViewDidChangeToState:videoPlayer.state];
+    [self playerViewDidChangeToState:videoPlayer.state];
     
     // player control
     [self player:videoPlayer didChangeToState:videoPlayer.state];
@@ -313,6 +366,25 @@
     
     NSString *time = [self covertToStringWithTime:playTime];
     [_controlView setCurrentVideoTime:time];
+    [_controlView setSliderProgress:playTime/[videoPlayer duration]];
+}
+
+- (void)videoPlayer:(TYVideoPlayer *)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track
+{
+    NSLog(@"播放完成！");
+    [self showErrorViewWithTitle:@"视频播放完成!" btnMsg:@"重新播放" action:@selector(reloadVideo)];
+}
+
+- (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
+{
+    NSLog(@"videoPlayer receivedErrorCode %@",error);
+    [self showErrorViewWithTitle:@"视频播放失败!" btnMsg:@"重试" action:@selector(reloadCurrentVideo)];
+}
+
+- (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedTimeout:(TYVideoPlayerTimeOut)timeout
+{
+    NSLog(@"videoPlayer receivedTimeout %ld",timeout);
+    [self showErrorViewWithTitle:@"视频播放超时!" btnMsg:@"重试" action:@selector(reloadCurrentVideo)];
 }
 
 #pragma mark - TYVideoControlViewDelegate
@@ -364,7 +436,7 @@
             break;
         case TYSliderStateDraging:
         {
-            NSTimeInterval sliderTime = [_videoPlayer duration]*progress;
+            NSTimeInterval sliderTime = floor([_videoPlayer duration]*progress);
             NSString *time = [self covertToStringWithTime:sliderTime];
             [_controlView setCurrentVideoTime:time];
             break;
@@ -372,7 +444,7 @@
         case TYSliderStateEnd:
         {
             _isDraging = NO;
-            NSTimeInterval sliderTime = [_videoPlayer duration]*progress;
+            NSTimeInterval sliderTime = floor([_videoPlayer duration]*progress);
             NSString *time = [self covertToStringWithTime:sliderTime];
             [_videoPlayer seekToTime:sliderTime];
             [_controlView setCurrentVideoTime:time];
@@ -406,6 +478,7 @@
 
 - (void)dealloc
 {
+    [self stop];
     NSLog(@"TYVideoPlayerController dealloc");
 }
 

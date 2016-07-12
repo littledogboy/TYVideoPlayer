@@ -127,6 +127,11 @@
     _bottomView.totalTimeLabel.text = time;
 }
 
+- (void)setSliderProgress:(CGFloat)progress
+{
+    _bottomView.progressSlider.value = progress;
+}
+
 #pragma mark - action
 
 - (void)sliderBeginDraging:(UISlider *)sender

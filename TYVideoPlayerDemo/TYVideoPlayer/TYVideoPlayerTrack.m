@@ -25,7 +25,7 @@
 
 - (void)resetTrack
 {
-    _videoLoadContinueLastTime = NO;
+    _continueLastWatchTime = NO;
     _isPlayedToEnd = NO;
     _isVideoLoadedBefore = NO;
     _lastTimeInSeconds = 0;

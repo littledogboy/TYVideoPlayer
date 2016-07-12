@@ -277,7 +277,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)reloadCurrentVideoTrackContinueLastTime:(BOOL)continueLastTime
 {
-    _track.videoLoadContinueLastTime = continueLastTime;
+    _track.continueLastWatchTime = continueLastTime;
     [self reloadCurrentVideoTrack];
 }
 
@@ -418,12 +418,11 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
                 if (_track.lastTimeInSeconds > _track.videoDuration) {
                     _track.lastTimeInSeconds = 0;
                 }
-                if (_track.videoLoadContinueLastTime && _track.lastTimeInSeconds > 0) {
+                if (_track.continueLastWatchTime && _track.lastTimeInSeconds > 0) {
                     [_playerItem seekToTime:CMTimeMakeWithSeconds(_track.lastTimeInSeconds, 1)];
                 }
                 self.player = [AVPlayer playerWithPlayerItem:_playerItem];
                 [_playerLayerView setPlayer:_player];
-                TYDLog(@"setPlayer");
             }else if (status == AVKeyValueStatusFailed || status == AVKeyValueStatusUnknown) {
                 [self notifyErrorCode:kVideoPlayerErrorAssetLoadError error:error];
             }
@@ -776,12 +775,13 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)playerDidPlayToEnd:(NSNotification *)notification
 {
-    dispatch_main_async_safe_ty(^{
-        _track.isPlayedToEnd = YES;
-        if ([_delegate respondsToSelector:@selector(videoPlayer:didEndToPlayTrack:)]) {
-            [_delegate videoPlayer:self didEndToPlayTrack:_track];
+    _track.isPlayedToEnd = YES;
+    __weak typeof(self) weakSelf = self;
+    [self pauseContentCompletion:^{
+        if ([weakSelf.delegate respondsToSelector:@selector(videoPlayer:didEndToPlayTrack:)]) {
+            [weakSelf.delegate videoPlayer:weakSelf didEndToPlayTrack:weakSelf.track];
         }
-    });
+    }];
 }
 
 - (void)playerDidFailedToPlay:(NSNotification *)notification

@@ -47,4 +47,6 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 
 - (void)setCurrentVideoTime:(NSString *)time;
 
+- (void)setSliderProgress:(CGFloat)progress;
+
 @end

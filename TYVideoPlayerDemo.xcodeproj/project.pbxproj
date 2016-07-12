@@ -24,6 +24,7 @@
 		2B59ACFA1D2B93E800B10FB4 /* TYVideoControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACF91D2B93E800B10FB4 /* TYVideoControlView.m */; };
 		2B59ACFD1D2BA80300B10FB4 /* SimpleVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */; };
 		2B86F56E1D333C180057CC18 /* VideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B86F56D1D333C180057CC18 /* VideoPlayerViewController.m */; };
+		2BD47F171D34AF78004D5834 /* TYVideoErrorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BD47F161D34AF78004D5834 /* TYVideoErrorView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,8 @@
 		2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleVideoViewController.m; sourceTree = "<group>"; };
 		2B86F56C1D333C180057CC18 /* VideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayerViewController.h; sourceTree = "<group>"; };
 		2B86F56D1D333C180057CC18 /* VideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerViewController.m; sourceTree = "<group>"; };
+		2BD47F151D34AF78004D5834 /* TYVideoErrorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoErrorView.h; sourceTree = "<group>"; };
+		2BD47F161D34AF78004D5834 /* TYVideoErrorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoErrorView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +194,8 @@
 				2B1A01E21D2E0662007D3984 /* TYVideoBottomView.m */,
 				2B1A01E41D2E0668007D3984 /* TYLoadingView.h */,
 				2B1A01E51D2E0668007D3984 /* TYLoadingView.m */,
+				2BD47F151D34AF78004D5834 /* TYVideoErrorView.h */,
+				2BD47F161D34AF78004D5834 /* TYVideoErrorView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -309,6 +314,7 @@
 				2B59ACFA1D2B93E800B10FB4 /* TYVideoControlView.m in Sources */,
 				2B05CB0E1D2D098900647989 /* TYVideoPlayerController.m in Sources */,
 				2B59ACF71D2B936000B10FB4 /* TYVideoPlayerView.m in Sources */,
+				2BD47F171D34AF78004D5834 /* TYVideoErrorView.m in Sources */,
 				2B34FC821D18D73400B2F3E6 /* TYVideoPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -77,10 +77,10 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 - (BOOL)videoPlayer:(TYVideoPlayer*)videoPlayer shouldPlayTrack:(id<TYVideoPlayerTrack>)track;
 
 // 将要播放
-- (BOOL)videoPlayer:(TYVideoPlayer*)videoPlayer willPlayTrack:(id<TYVideoPlayerTrack>)track;
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer willPlayTrack:(id<TYVideoPlayerTrack>)track;
 
 // 播放完成
-- (BOOL)videoPlayer:(TYVideoPlayer*)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track;
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track;
 
 // 是否应该改变状态
 - (BOOL)videoPlayer:(TYVideoPlayer*)videoPlayer shouldChangeToState:(TYVideoPlayerState)toState;
@@ -130,7 +130,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView;
 
-- (void)reloadCurrentVideoTrack; // if track videoLoadContinueLastTime YES will continue last watch time
+- (void)reloadCurrentVideoTrack; // if track continueLastWatchTime YES will continue last watch time
 
 // video control
 

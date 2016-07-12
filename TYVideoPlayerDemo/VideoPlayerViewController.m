@@ -8,6 +8,7 @@
 
 #import "VideoPlayerViewController.h"
 #import "TYVideoPlayerController.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface VideoPlayerViewController ()
 @property (nonatomic, weak) TYVideoPlayerController *playerController;
@@ -18,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    MPMoviePlayerController *p;
     [self addVideoPlayerController];
     
     [self loadVideo];
@@ -27,7 +28,12 @@
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _playerController.view.frame  = CGRectMake(0, 20, CGRectGetWidth(self.view.frame), CGRectGetWidth(self.view.frame)*9/16);
+    CGRect bounds = self.view.frame;
+    if (_playerController.isFullScreen) {
+        _playerController.view.frame = CGRectMake(0, 0, MAX(CGRectGetHeight(bounds), CGRectGetWidth(bounds)), MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds)));
+    }else {
+         _playerController.view.frame = CGRectMake(0, 20, MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds)), MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds))*9/16);
+    }
 }
 
 - (void)addVideoPlayerController
@@ -42,6 +48,20 @@
 {
     NSURL *streamURL = [NSURL URLWithString:@"http://down.233.com/2014_2015/2014/jzs1/jingji_zhenti_yjw/6-qllgl2v5x9b80vvgwgzzlnzydkj1bpr66hnool80.mp4"];
     [_playerController loadVideoWithStreamURL:streamURL];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    //发生在翻转开始之前。
+    CGRect bounds = self.view.frame;
+    [UIView animateWithDuration:duration animations:^{
+        if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+             _playerController.view.frame = CGRectMake(0, 0, MAX(CGRectGetHeight(bounds), CGRectGetWidth(bounds)), MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds)));
+        }else {
+             _playerController.view.frame = CGRectMake(0, 20, MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds)), MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds))*9/16);
+        }
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

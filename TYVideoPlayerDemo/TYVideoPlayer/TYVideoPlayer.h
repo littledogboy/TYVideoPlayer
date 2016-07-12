@@ -154,7 +154,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (NSTimeInterval)currentTime;
 
-- (NSTimeInterval)currentDuration;
+- (NSTimeInterval)duration;
 
 // timeout time, default 60s
 

@@ -10,11 +10,14 @@
 
 @interface TYVideoPlayerController : UIViewController
 
-// 加载完视频是否自动播放
-@property (nonatomic, assign) BOOL loadVideoEndAutoPlay;
-
+// 视频名 默认YES
+@property (nonatomic, strong) NSString *videoTitle;
 // 播放地址
 @property (nonatomic, strong, readonly) NSURL *streamURL;
+// 加载完视频是否自动播放
+@property (nonatomic, assign) BOOL loadVideoShouldAutoplay;
+
+@property (nonatomic, assign, readonly) BOOL isFullScreen;
 
 // 加载视频
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;

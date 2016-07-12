@@ -80,7 +80,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (IBAction)seekTimeAction:(id)sender {
-    [_videoPlayer seekToTime:(int)_videoPlayer.currentDuration/2];
+    [_videoPlayer seekToTime:(int)_videoPlayer.duration/2];
 }
 
 #pragma mark - TYVideoPlayerDelegate

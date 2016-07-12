@@ -579,7 +579,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     }
 }
 
-- (NSTimeInterval)currentDuration
+- (NSTimeInterval)duration
 {
     return CMTimeGetSeconds([self.player.currentItem duration]);
 }
@@ -729,7 +729,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
     }else if (object == _playerItem) {
         if ([keyPath isEqualToString:kTYVideoPlayerBufferEmptyKey]) {
             TYDLog(@"playbackBufferEmpty");
-            if (self.playerItem.isPlaybackBufferEmpty && [self currentTime] > 0 && [self currentTime] < [self currentDuration] - 1 && _state == TYVideoPlayerStateContentPlaying) {
+            if (self.playerItem.isPlaybackBufferEmpty && [self currentTime] > 0 && [self currentTime] < [self duration] - 1 && _state == TYVideoPlayerStateContentPlaying) {
                 self.state = TYVideoPlayerStateBuffering;
             }
         }else if ([keyPath isEqualToString:kTYVideoPlayerLikelyToKeepUpKey]) {
@@ -765,7 +765,7 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
         return;
     }
     
-    if ([self isPlaying]) {
+    if ([self isPlaying] && _isEndToSeek) {
         _track.videoTime = timeInSeconds;
         TYDLog(@"timeInSeconds %ld",(NSInteger)timeInSeconds);
         if ([_delegate respondsToSelector:@selector(videoPlayer:track:didUpdatePlayTime:)]) {

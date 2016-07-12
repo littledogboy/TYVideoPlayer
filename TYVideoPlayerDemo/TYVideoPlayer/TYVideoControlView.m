@@ -24,7 +24,6 @@
 @property (nonatomic, weak) TYVideoBottomView *bottomView;
 @property (nonatomic, weak) UIButton *suspendBtn;
 
-@property (nonatomic, assign) BOOL isDragSlider;
 @end
 
 @implementation TYVideoControlView
@@ -38,6 +37,8 @@
         [self addBottomView];
         
         [self addSuspendButton];
+        
+        
     }
     return self;
 }
@@ -68,8 +69,11 @@
 - (void)addBottomView
 {
     TYVideoBottomView *bottomView = [[TYVideoBottomView alloc]init];
+    bottomView.curTimeLabel.text = @"00:00";
+    bottomView.totalTimeLabel.text = @"00:00";
     [bottomView.fullScreenBtn addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
     [bottomView.progressSlider addTarget:self action:@selector(sliderBeginDraging:) forControlEvents:UIControlEventTouchDown];
+    [bottomView.progressSlider addTarget:self action:@selector(sliderIsDraging:) forControlEvents:UIControlEventValueChanged];
     [bottomView.progressSlider addTarget:self action:@selector(sliderEndDraging:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside|UIControlEventTouchCancel];
     [self addSubview:bottomView];
     _bottomView = bottomView;
@@ -83,47 +87,79 @@
     [suspendBtn setBackgroundImage:[UIImage imageNamed:@"pause-butt"] forState:UIControlStateNormal];
     [suspendBtn setBackgroundImage:[UIImage imageNamed:@"play-butt"] forState:UIControlStateSelected];
     [suspendBtn addTarget:self action:@selector(suspendAction:) forControlEvents:UIControlEventTouchUpInside];
-    suspendBtn.selected = YES;
     [self addSubview:suspendBtn];
     _suspendBtn = suspendBtn;
+}
+
+#pragma mark - pravite
+
+- (BOOL)isOrientationPortrait
+{
+    return [[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait || [[UIApplication sharedApplication] statusBarOrientation] == UIDeviceOrientationPortraitUpsideDown;
+}
+
+- (void)recieveControlEvent:(TYVideoControlEvent)event
+{
+    if ([_delegate respondsToSelector:@selector(videoControlView:shouldResponseControlEvent:)]
+        && ![_delegate videoControlView:self shouldResponseControlEvent:event]) {
+        return;
+    }
+    
+    if ([_delegate respondsToSelector:@selector(videoControlView:recieveControlEvent:)]) {
+        [_delegate videoControlView:self recieveControlEvent:event];
+    }
+}
+
+#pragma mark - public
+
+- (void)updateCurrentVideoTime:(NSString *)time
+{
+    _bottomView.curTimeLabel.text = time;
+}
+
+- (void)updateTotalVideoTime:(NSString *)time
+{
+    _bottomView.totalTimeLabel.text = time;
 }
 
 #pragma mark - action
 
 - (void)sliderBeginDraging:(UISlider *)sender
 {
-    _isDragSlider = YES;
     NSLog(@"sliderBeginDraging");
+    if ([_delegate respondsToSelector:@selector(videoControlView:state:sliderToProgress:)]) {
+        [_delegate videoControlView:self state:TYSliderStateBegin sliderToProgress:sender.value];
+    }
+}
+
+- (void)sliderIsDraging:(UISlider *)sender
+{
+    if ([_delegate respondsToSelector:@selector(videoControlView:state:sliderToProgress:)]) {
+        [_delegate videoControlView:self state:TYSliderStateDraging sliderToProgress:sender.value];
+    }
 }
 
 - (void)sliderEndDraging:(UISlider *)sender
 {
     NSLog(@"sliderEndDraging");
-    //_isDragSlider = NO;
-    if ([_delegate respondsToSelector:@selector(videoControlView:sliderToProgress:)]) {
-        [_delegate videoControlView:self sliderToProgress:sender.value];
+    if ([_delegate respondsToSelector:@selector(videoControlView:state:sliderToProgress:)]) {
+        [_delegate videoControlView:self state:TYSliderStateEnd sliderToProgress:sender.value];
     }
 }
 
 - (void)fullScreenAction:(UIButton *)sender
 {
-    if ([_delegate respondsToSelector:@selector(videoControlView:recieveControlEvent:)]) {
-        [_delegate videoControlView:self recieveControlEvent:TVVideoControlEventFullScreen];
-    }
+    [self recieveControlEvent:[self isOrientationPortrait] ? TYVideoControlEventFullScreen : TYVideoControlEventNormalScreen];
 }
 
 - (void)backAction:(UIButton *)sender
 {
-    if ([_delegate respondsToSelector:@selector(videoControlView:recieveControlEvent:)]) {
-        [_delegate videoControlView:self recieveControlEvent:TVVideoControlEventBack];
-    }
+    [self recieveControlEvent:TYVideoControlEventBack];
 }
 
 - (void)suspendAction:(UIButton *)sender
 {
-    if ([_delegate respondsToSelector:@selector(videoControlView:recieveControlEvent:)]) {
-        [_delegate videoControlView:self recieveControlEvent:sender.isSelected ? TVVideoControlEventPlay:TVVideoControlEventSuspend];
-    }
+    [self recieveControlEvent:sender.isSelected ? TYVideoControlEventPlay:TYVideoControlEventSuspend];
 }
 
 - (void)layoutSubviews

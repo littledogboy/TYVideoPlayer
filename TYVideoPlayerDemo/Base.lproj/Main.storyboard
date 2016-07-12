@@ -28,7 +28,7 @@
                                 <rect key="frame" x="241" y="256" width="118" height="30"/>
                                 <state key="normal" title="play Player Video"/>
                                 <connections>
-                                    <segue destination="HmK-Mh-yNO" kind="show" id="RLF-HV-h4l"/>
+                                    <segue destination="HmK-Mh-yNO" kind="show" id="Vgw-ab-3UQ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -135,6 +135,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="H6y-4i-OT1"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YoK-ye-cuS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

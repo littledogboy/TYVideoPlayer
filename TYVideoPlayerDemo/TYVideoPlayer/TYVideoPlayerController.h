@@ -21,7 +21,7 @@
 // 返回， 默认nil，pop或者dismiss
 @property (nonatomic, copy) void (^goBackHandle)(TYVideoPlayerController *);
 
-// 加载视频streamURL ，如果在viewDidLoad之前设置了streamURL 在viewDidLoad中将会自动调用这个
+// 加载视频URL，如果在viewDidLoad之前设置了streamURL 在viewDidLoad中将会自动调用这个
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;
 
 - (void)play;

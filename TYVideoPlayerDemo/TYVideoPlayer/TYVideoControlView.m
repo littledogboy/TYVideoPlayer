@@ -137,6 +137,16 @@
     _bottomView.fullScreenBtn.hidden = fullScreen;
 }
 
+- (void)setPlayBtnState:(BOOL)isPlayState
+{
+    _suspendBtn.selected = isPlayState;
+}
+
+- (void)hidePlayBtn:(BOOL)hidePlayBtn
+{
+    _suspendBtn.hidden = hidePlayBtn;
+}
+
 #pragma mark - action
 
 - (void)sliderBeginDraging:(UISlider *)sender

@@ -172,7 +172,7 @@
 - (void)showLoadingView
 {
     if (!_loadingView.isAnimating) {
-        _controlView.suspendBtn.hidden = YES;
+        [_controlView hidePlayBtn:YES];
         [_loadingView startAnimation];
     }
 }
@@ -180,7 +180,7 @@
 - (void)stopLoadingView
 {
     if (_loadingView.isAnimating) {
-        _controlView.suspendBtn.hidden = NO;
+        [_controlView hidePlayBtn:NO];
         [_loadingView stopAnimation];
     }
 }
@@ -197,7 +197,7 @@
     }else {
         _controlView.hidden = NO;
     }
-    _controlView.suspendBtn.hidden = [_loadingView isAnimating];
+    [_controlView hidePlayBtn:[_loadingView isAnimating]];
 }
 
 - (void)hideControlViewWithAnimation:(BOOL)animation
@@ -234,7 +234,6 @@
 {
     if (!_errorView) {
         TYVideoErrorView *errorView = [[TYVideoErrorView alloc]initWithFrame:self.view.bounds];
-        errorView.userInteractionEnabled = YES;
         errorView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         [self.view addSubview:errorView];
         _errorView = errorView;
@@ -287,12 +286,12 @@
             break;
         }
         case TYVideoPlayerStateContentPlaying:
-            _controlView.suspendBtn.selected = NO;
+            [_controlView setPlayBtnState:NO];
             [self stopLoadingView];
-            _controlView.suspendBtn.hidden = NO;
+            [_controlView hidePlayBtn:NO];
             break;
         case TYVideoPlayerStateContentPaused:
-            _controlView.suspendBtn.selected = YES;
+            [_controlView setPlayBtnState:YES];
             break;
         case TYVideoPlayerStateSeeking:
             [self showLoadingView];;
@@ -302,11 +301,11 @@
             break;
         case TYVideoPlayerStateStopped:
             [self stopLoadingView];
-            _controlView.suspendBtn.hidden = YES;
+            [_controlView hidePlayBtn:YES];
             break;
         case TYVideoPlayerStateError:
             [self stopLoadingView];
-            _controlView.suspendBtn.hidden = YES;
+            [_controlView hidePlayBtn:YES];
             break;
         default:
             break;

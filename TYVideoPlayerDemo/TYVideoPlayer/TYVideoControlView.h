@@ -37,8 +37,6 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 
 @interface TYVideoControlView : UIView
 
-@property (nonatomic, weak, readonly) UIButton *suspendBtn;
-
 @property (nonatomic, weak) id<TYVideoControlViewDelegate> delegate;
 
 - (void)setTitle:(NSString *)title;
@@ -50,5 +48,9 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 - (void)setSliderProgress:(CGFloat)progress;
 
 - (void)setFullScreen:(BOOL)fullScreen;
+
+- (void)setPlayBtnState:(BOOL)isPlayState;
+
+- (void)hidePlayBtn:(BOOL)hidePlayBtn;
 
 @end

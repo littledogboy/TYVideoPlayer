@@ -9,19 +9,23 @@
 #import "TYVideoErrorView.h"
 
 @interface TYVideoErrorView ()
+@property (nonatomic, weak) UIButton *backBtn;
 @property (nonatomic,weak) UILabel *titleLabel;
 @property (nonatomic,weak) UIButton *msgBtn;
 @end
 
-#define kTitleLabelHeight 21
-#define kMsgBtnWidth 100
-#define kMsgBtnHeight 32
+#define kViewHorizenlSpacing 10
+#define kBackBtnHeightWidth 28
+#define kTitleLabelHeight 18
+#define kMsgBtnWidthHeight 60
 
 @implementation TYVideoErrorView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
+        
+        [self addBackButton];
         
         [self addTitleLabel];
         
@@ -34,6 +38,8 @@
 {
     if (self = [super initWithCoder:aDecoder]) {
         
+        [self addBackButton];
+        
         [self addTitleLabel];
         
         [self addMsgButton];
@@ -41,9 +47,18 @@
     return self;
 }
 
+- (void)addBackButton
+{
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backBtn setImage:[UIImage imageNamed:@"back-icon"] forState:UIControlStateNormal];
+    [self addSubview:backBtn];
+    _backBtn = backBtn;
+}
+
 - (void)addTitleLabel
 {
     UILabel *titleLabel = [[UILabel alloc]init];
+    titleLabel.font = [UIFont systemFontOfSize:15];
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     [self addSubview:titleLabel];
@@ -53,7 +68,7 @@
 - (void)addMsgButton
 {
     UIButton *msgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [msgBtn setBackgroundColor:[UIColor colorWithRed:237/255. green:96/255. blue:30/255. alpha:1]];
+    [msgBtn setImage:[UIImage imageNamed:@"replay"] forState:UIControlStateNormal];
     [self addSubview:msgBtn];
     _msgBtn = msgBtn;
 }
@@ -61,8 +76,11 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _titleLabel.frame = CGRectMake(0, CGRectGetHeight(self.frame)/2 - kTitleLabelHeight - 10, CGRectGetWidth(self.frame), kTitleLabelHeight);
-    _msgBtn.frame = CGRectMake((CGRectGetWidth(self.frame)-kMsgBtnWidth)/2, CGRectGetMaxY(_titleLabel.frame)+20, kMsgBtnWidth, kMsgBtnHeight);
+    _backBtn.frame = CGRectMake(kViewHorizenlSpacing, 20, kBackBtnHeightWidth, kBackBtnHeightWidth);
+    _msgBtn.frame = CGRectMake(0, 0, kMsgBtnWidthHeight, kMsgBtnWidthHeight);
+    _msgBtn.center = self.center;
+    _titleLabel.frame = CGRectMake(0, CGRectGetMaxY(_msgBtn.frame)+6, CGRectGetWidth(self.frame), kTitleLabelHeight);
+    
 }
 
 @end

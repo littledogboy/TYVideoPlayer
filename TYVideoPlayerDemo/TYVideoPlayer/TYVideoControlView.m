@@ -17,7 +17,7 @@
 #define kTitleViewHight 28
 #define kBottomViewBottomEdge 8
 #define kBottomViewHeight 22
-#define kSuspendBtnHeight 65
+#define kSuspendBtnHeight 60
 
 @interface TYVideoControlView ()
 @property (nonatomic, weak) TYVideoTitleView *titleView;

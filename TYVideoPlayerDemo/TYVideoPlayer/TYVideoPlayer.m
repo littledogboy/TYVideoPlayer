@@ -39,6 +39,8 @@ static NSString *const kTYVideoPlayerStatusKey = @"status";
 static NSString *const kTYVideoPlayerBufferEmptyKey = @"playbackBufferEmpty";
 static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepUp";
 
+static const NSInteger kTYVideoPlayerTimeOut = 60;
+
 
 @interface TYVideoPlayer () {
     
@@ -91,9 +93,9 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 - (void)configureVideoPlayer
 {
-    _bufferingTimeOut = 60;
-    _seekingTimeOut = 60;
-    _loadingTimeOut = 60;
+    _bufferingTimeOut = kTYVideoPlayerTimeOut;
+    _seekingTimeOut = kTYVideoPlayerTimeOut;
+    _loadingTimeOut = kTYVideoPlayerTimeOut;
     
     _state = TYVideoPlayerStateUnknown;
     

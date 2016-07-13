@@ -228,18 +228,17 @@
 }
 
 // show errorView
-- (void)showErrorViewWithTitle:(NSString *)title btnMsg:(NSString *)btnMsg action:(SEL)action;
+- (void)showErrorViewWithTitle:(NSString *)title action:(SEL)action;
 {
     if (!_errorView) {
         TYVideoErrorView *errorView = [[TYVideoErrorView alloc]initWithFrame:self.view.bounds];
-        errorView.backgroundColor = [UIColor blackColor];
+        errorView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         [self.view addSubview:errorView];
         _errorView = errorView;
     }
-    _errorView.msgBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [_errorView.msgBtn setTitle:btnMsg forState:UIControlStateNormal];
-    [_errorView.msgBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     _errorView.titleLabel.text = title;
+    [_errorView.msgBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    [_errorView.backBtn addTarget:self action:@selector(goBackAction) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)hideErrorView
@@ -343,6 +342,15 @@
     }
 }
 
+- (void)goBackAction
+{
+    if (self.isFullScreen){
+        [self changeToOrientation:UIInterfaceOrientationPortrait];
+    }else {
+        [self goBack];
+    }
+}
+
 - (void)goBack
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
@@ -380,19 +388,19 @@
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track
 {
     NSLog(@"播放完成！");
-    [self showErrorViewWithTitle:@"视频播放完成!" btnMsg:@"重新播放" action:@selector(reloadVideo)];
+    [self showErrorViewWithTitle:@"重播" action:@selector(reloadVideo)];
 }
 
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
 {
     NSLog(@"videoPlayer receivedErrorCode %@",error);
-    [self showErrorViewWithTitle:@"视频播放失败!" btnMsg:@"重试" action:@selector(reloadCurrentVideo)];
+    [self showErrorViewWithTitle:@"视频播放失败,重试" action:@selector(reloadCurrentVideo)];
 }
 
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedTimeout:(TYVideoPlayerTimeOut)timeout
 {
     NSLog(@"videoPlayer receivedTimeout %ld",timeout);
-    [self showErrorViewWithTitle:@"视频播放超时!" btnMsg:@"重试" action:@selector(reloadCurrentVideo)];
+    [self showErrorViewWithTitle:@"视频播放超时,重试" action:@selector(reloadCurrentVideo)];
 }
 
 #pragma mark - TYVideoControlViewDelegate
@@ -413,11 +421,7 @@
 {
     switch (event) {
         case TYVideoControlEventBack:
-            if (self.isFullScreen){
-                [self changeToOrientation:UIInterfaceOrientationPortrait];
-            }else {
-                [self goBack];
-            }
+            [self goBackAction];
             break;
         case TYVideoControlEventFullScreen:
             [self changeToOrientation:UIInterfaceOrientationLandscapeRight];

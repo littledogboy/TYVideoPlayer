@@ -10,6 +10,7 @@
 
 @interface TYVideoErrorView : UIView
 
+@property (nonatomic, weak, readonly) UIButton *backBtn;
 @property (nonatomic, weak, readonly) UILabel *titleLabel;
 @property (nonatomic, weak, readonly) UIButton *msgBtn;
 

@@ -132,6 +132,11 @@
     _bottomView.progressSlider.value = progress;
 }
 
+- (void)setFullScreen:(BOOL)fullScreen
+{
+    _bottomView.fullScreenBtn.hidden = fullScreen;
+}
+
 #pragma mark - action
 
 - (void)sliderBeginDraging:(UISlider *)sender

@@ -15,8 +15,8 @@
 @property (nonatomic, weak) UISlider *progressSlider;
 @end
 
-#define kButtonHeight 25
-#define kTimeLabelWidth 52
+#define kButtonHeight 20
+#define kTimeLabelWidth 46
 #define kViewHorizenlSpace 10
 
 @implementation TYVideoBottomView
@@ -40,7 +40,7 @@
 {
     UILabel *curTimeLabel = [[UILabel alloc]init];
     curTimeLabel.textColor = [UIColor whiteColor];
-    curTimeLabel.font = [UIFont systemFontOfSize:12];
+    curTimeLabel.font = [UIFont systemFontOfSize:11];
     curTimeLabel.textAlignment = NSTextAlignmentCenter;
     [self addSubview:curTimeLabel];
     _curTimeLabel = curTimeLabel;
@@ -50,7 +50,7 @@
 {
     UILabel *totalTimeLabel = [[UILabel alloc]init];
     totalTimeLabel.textColor = [UIColor whiteColor];
-    totalTimeLabel.font = [UIFont systemFontOfSize:12];
+    totalTimeLabel.font = [UIFont systemFontOfSize:11];
     totalTimeLabel.textAlignment = NSTextAlignmentCenter;
     [self addSubview:totalTimeLabel];
     _totalTimeLabel = totalTimeLabel;
@@ -59,7 +59,7 @@
 - (void)addFullScreenBtn
 {
     UIButton *fullScreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [fullScreenBtn setImage:[UIImage imageNamed:@"big-nor-nor"] forState:UIControlStateNormal];
+    [fullScreenBtn setImage:[UIImage imageNamed:@"miniplayer_fullsize"] forState:UIControlStateNormal];
     [self addSubview:fullScreenBtn];
     _fullScreenBtn = fullScreenBtn;
 }
@@ -67,7 +67,8 @@
 - (void)addProgressSlider
 {
     UISlider *progressSlider = [[UISlider alloc]init];
-    [progressSlider setThumbImage:[UIImage imageNamed:@"play-control"] forState:UIControlStateNormal];
+    progressSlider.minimumTrackTintColor = [UIColor colorWithRed:252/225. green:110/255. blue:102/255. alpha:1.0];
+    [progressSlider setThumbImage:[UIImage imageNamed:@"fullplayer_point"] forState:UIControlStateNormal];
     [self addSubview:progressSlider];
     _progressSlider = progressSlider;
 }

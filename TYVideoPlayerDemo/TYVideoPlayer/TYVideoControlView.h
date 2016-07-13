@@ -49,4 +49,6 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 
 - (void)setSliderProgress:(CGFloat)progress;
 
+- (void)setFullScreen:(BOOL)fullScreen;
+
 @end

@@ -83,6 +83,7 @@
     _playerView.frame = self.view.bounds;
     _loadingView.center = _playerView.center;
     _controlView.frame = self.view.bounds;
+    [_controlView setFullScreen:self.isFullScreen];
 }
 
 #pragma mark - add subview

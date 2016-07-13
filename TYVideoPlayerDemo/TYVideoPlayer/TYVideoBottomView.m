@@ -68,6 +68,7 @@
 {
     UISlider *progressSlider = [[UISlider alloc]init];
     progressSlider.minimumTrackTintColor = [UIColor colorWithRed:252/225. green:110/255. blue:102/255. alpha:1.0];
+    progressSlider.maximumTrackTintColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.5];
     [progressSlider setThumbImage:[UIImage imageNamed:@"fullplayer_point"] forState:UIControlStateNormal];
     [self addSubview:progressSlider];
     _progressSlider = progressSlider;

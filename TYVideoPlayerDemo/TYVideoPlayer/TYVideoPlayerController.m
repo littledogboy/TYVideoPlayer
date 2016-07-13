@@ -286,6 +286,7 @@
             break;
         }
         case TYVideoPlayerStateContentPlaying:
+            [self hideErrorView];
             [_controlView setPlayBtnState:NO];
             [self stopLoadingView];
             [_controlView hidePlayBtn:NO];

@@ -129,7 +129,8 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView;
 
-- (void)reloadCurrentVideoTrack; // if track continueLastWatchTime YES will continue last watch time
+/** if track continueLastWatchTime YES will continue last watch time */
+- (void)reloadCurrentVideoTrack;
 
 // video control
 

@@ -530,9 +530,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     __weak typeof(self) weakSelf = self;
     [self seekToTimeInSecond:time completion:^(BOOL finished) {
         if (finished){
-            [weakSelf pauseContentCompletion:^{
-                [weakSelf playContent];
-            }];
+            [weakSelf playContent];
         }
     }];
 }

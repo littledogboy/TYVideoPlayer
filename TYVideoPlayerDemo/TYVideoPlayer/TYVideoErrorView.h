@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, TYVideoErrorEvent) {
+    TYVideoErrorEventBack,
+    TYVideoErrorEventReplay,
+};
+
 @interface TYVideoErrorView : UIView
 
-@property (nonatomic, weak, readonly) UIButton *backBtn;
-@property (nonatomic, weak, readonly) UILabel *titleLabel;
-@property (nonatomic, weak, readonly) UIButton *msgBtn;
+@property (nonatomic, copy) void (^eventActionHandle)(TYVideoErrorEvent event);
+
+- (void)setTitle:(NSString *)title;
 
 @end

@@ -120,8 +120,10 @@
 
 - (void)addSingleTapGesture
 {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTapAction:)];
-    [self.view addGestureRecognizer:tap];
+    UITapGestureRecognizer *hideTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTapAction:)];
+    [_controlView addGestureRecognizer:hideTap];
+    UITapGestureRecognizer *showTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTapAction:)];
+    [_playerView addGestureRecognizer:showTap];
 }
 
 #pragma mark - getter
@@ -228,17 +230,32 @@
 }
 
 // show errorView
-- (void)showErrorViewWithTitle:(NSString *)title action:(SEL)action;
+- (void)showErrorViewWithTitle:(NSString *)title actionHandle:(void (^)(void))actionHandle
 {
     if (!_errorView) {
         TYVideoErrorView *errorView = [[TYVideoErrorView alloc]initWithFrame:self.view.bounds];
+        errorView.userInteractionEnabled = YES;
         errorView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
         [self.view addSubview:errorView];
         _errorView = errorView;
     }
-    _errorView.titleLabel.text = title;
-    [_errorView.msgBtn addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    [_errorView.backBtn addTarget:self action:@selector(goBackAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    __weak typeof(self) weakSelf = self;
+    [_errorView setTitle:title];
+    [_errorView setEventActionHandle:^(TYVideoErrorEvent event) {
+        switch (event) {
+            case TYVideoErrorEventBack:
+                [weakSelf goBackAction];
+                break;
+            case TYVideoErrorEventReplay:
+                if (actionHandle) {
+                    actionHandle();
+                }
+                break;
+            default:
+                break;
+        }
+    }];
 }
 
 - (void)hideErrorView
@@ -309,7 +326,6 @@
             break;
     }
 }
-
 
 - (NSString *)covertToStringWithTime:(NSInteger)time
 {
@@ -388,19 +404,28 @@
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track
 {
     NSLog(@"播放完成！");
-    [self showErrorViewWithTitle:@"重播" action:@selector(reloadVideo)];
+    __weak typeof(self) weakSelf = self;
+    [self showErrorViewWithTitle:@"重播" actionHandle:^{
+        [weakSelf reloadVideo];
+    }];
 }
 
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
 {
     NSLog(@"videoPlayer receivedErrorCode %@",error);
-    [self showErrorViewWithTitle:@"视频播放失败,重试" action:@selector(reloadCurrentVideo)];
+    __weak typeof(self) weakSelf = self;
+    [self showErrorViewWithTitle:@"视频播放失败,重试" actionHandle:^{
+        [weakSelf reloadCurrentVideo];
+    }];
 }
 
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedTimeout:(TYVideoPlayerTimeOut)timeout
 {
     NSLog(@"videoPlayer receivedTimeout %ld",timeout);
-    [self showErrorViewWithTitle:@"视频播放超时,重试" action:@selector(reloadCurrentVideo)];
+    __weak typeof(self) weakSelf = self;
+    [self showErrorViewWithTitle:@"视频播放超时,重试" actionHandle:^{
+        [weakSelf reloadCurrentVideo];
+    }];
 }
 
 #pragma mark - TYVideoControlViewDelegate

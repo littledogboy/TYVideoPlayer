@@ -51,6 +51,7 @@
 {
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [backBtn setImage:[UIImage imageNamed:@"back-icon"] forState:UIControlStateNormal];
+    [backBtn addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:backBtn];
     _backBtn = backBtn;
 }
@@ -69,8 +70,32 @@
 {
     UIButton *msgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [msgBtn setImage:[UIImage imageNamed:@"replay"] forState:UIControlStateNormal];
+    [msgBtn addTarget:self action:@selector(videoReplayAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:msgBtn];
     _msgBtn = msgBtn;
+}
+
+#pragma mark  - setter
+
+- (void)setTitle:(NSString *)title
+{
+    _titleLabel.text = title;
+}
+
+#pragma mark - action
+
+- (void)videoReplayAction:(UIButton *)button
+{
+    if (_eventActionHandle) {
+        _eventActionHandle(TYVideoErrorEventReplay);
+    }
+}
+
+- (void)backAction:(UIButton *)button
+{
+    if (_eventActionHandle) {
+        _eventActionHandle(TYVideoErrorEventBack);
+    }
 }
 
 - (void)layoutSubviews

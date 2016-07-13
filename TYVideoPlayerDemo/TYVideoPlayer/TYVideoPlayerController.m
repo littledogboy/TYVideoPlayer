@@ -86,6 +86,11 @@
     [_controlView setFullScreen:self.isFullScreen];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 #pragma mark - add subview
 
 - (void)addPlayerView

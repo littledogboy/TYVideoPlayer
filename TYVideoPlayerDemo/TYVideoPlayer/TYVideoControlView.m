@@ -13,8 +13,8 @@
 #define kBackBtnHeight 35
 #define kBackBtnTopEdage 12
 #define kBackBtnLeftEdage 10
-#define kTitleViewTopEdge 10
-#define kTitleViewHight 25
+#define kTitleViewTopEdge 20
+#define kTitleViewHight 28
 #define kBottomViewBottomEdge 8
 #define kBottomViewHeight 22
 #define kSuspendBtnHeight 65

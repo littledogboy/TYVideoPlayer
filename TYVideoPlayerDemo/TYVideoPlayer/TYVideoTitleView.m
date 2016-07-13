@@ -14,7 +14,7 @@
 @end
 
 #define kViewHorizenlSpacing 10
-#define kBackBtnHeightWidth 25
+#define kBackBtnHeightWidth 28
 
 @implementation TYVideoTitleView
 

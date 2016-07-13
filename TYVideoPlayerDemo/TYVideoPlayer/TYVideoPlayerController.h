@@ -15,7 +15,7 @@
 // 播放地址
 @property (nonatomic, strong) NSURL *streamURL;
 // 加载完视频是否自动播放
-@property (nonatomic, assign) BOOL loadVideoShouldAutoplay;
+@property (nonatomic, assign) BOOL shouldAutoplayVideo;
 // 是否全屏
 @property (nonatomic, assign, readonly) BOOL isFullScreen;
 // 返回， 默认nil，pop或者dismiss

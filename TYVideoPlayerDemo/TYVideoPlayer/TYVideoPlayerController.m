@@ -52,7 +52,7 @@
 
 - (void)configrePropertys
 {
-    _loadVideoShouldAutoplay = YES;
+    _shouldAutoplayVideo = YES;
 }
 
 #pragma mark - life cycle
@@ -250,10 +250,13 @@
 {
     switch (state) {
         case TYVideoPlayerStateRequestStreamURL:
+            [self showLoadingView];
+            if (_shouldAutoplayVideo) {
+                [self hideControlViewWithAnimation:NO];
+            }
             [_controlView setSliderProgress:0];
             [_controlView setCurrentVideoTime:@"00:00"];
             [_controlView setTotalVideoTime:@"00:00"];
-            [self showLoadingView];
             break;
         case TYVideoPlayerStateContentReadyToPlay:
         {
@@ -294,7 +297,7 @@
     // player control
     switch (state) {
         case TYVideoPlayerStateContentReadyToPlay:
-            if (_loadVideoShouldAutoplay) {
+            if (_shouldAutoplayVideo) {
                 [videoPlayer play];
             }
             break;

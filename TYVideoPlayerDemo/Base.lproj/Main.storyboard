@@ -142,7 +142,44 @@
                     <view key="view" contentMode="scaleToFill" id="m7X-dN-MMH">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vVN-bK-Kub">
+                                <rect key="frame" x="236" y="370" width="129" height="30"/>
+                                <state key="normal" title="playVODURL(点播)"/>
+                                <connections>
+                                    <action selector="playVodAction:" destination="HmK-Mh-yNO" eventType="touchUpInside" id="aQB-Wl-UB7"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G1h-rj-Jgy">
+                                <rect key="frame" x="238" y="430" width="125" height="30"/>
+                                <state key="normal" title="playLiveURL(直播)"/>
+                                <connections>
+                                    <action selector="playLiveAction:" destination="HmK-Mh-yNO" eventType="touchUpInside" id="WK6-lk-KcY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FqN-lj-Jnc">
+                                <rect key="frame" x="235" y="490" width="130" height="30"/>
+                                <state key="normal" title="playLocaURL(本地)"/>
+                                <connections>
+                                    <action selector="playLocalAction:" destination="HmK-Mh-yNO" eventType="touchUpInside" id="PLm-nx-LNo"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ovt-xe-lev" firstAttribute="top" secondItem="vVN-bK-Kub" secondAttribute="bottom" constant="200" id="3ys-Bh-MDu"/>
+                            <constraint firstItem="FqN-lj-Jnc" firstAttribute="top" secondItem="G1h-rj-Jgy" secondAttribute="bottom" constant="30" id="C4A-K1-LGQ"/>
+                            <constraint firstItem="G1h-rj-Jgy" firstAttribute="centerX" secondItem="m7X-dN-MMH" secondAttribute="centerX" id="ELy-5d-LTR"/>
+                            <constraint firstItem="FqN-lj-Jnc" firstAttribute="centerX" secondItem="m7X-dN-MMH" secondAttribute="centerX" id="m2t-vE-i4x"/>
+                            <constraint firstItem="vVN-bK-Kub" firstAttribute="centerX" secondItem="m7X-dN-MMH" secondAttribute="centerX" id="np5-Ma-bjb"/>
+                            <constraint firstItem="ovt-xe-lev" firstAttribute="top" secondItem="G1h-rj-Jgy" secondAttribute="bottom" constant="80" id="sV6-h8-nqa"/>
+                            <constraint firstItem="G1h-rj-Jgy" firstAttribute="top" secondItem="vVN-bK-Kub" secondAttribute="bottom" constant="30" id="vc7-Ck-T8J"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="sV6-h8-nqa"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="H6y-4i-OT1"/>
                 </viewController>

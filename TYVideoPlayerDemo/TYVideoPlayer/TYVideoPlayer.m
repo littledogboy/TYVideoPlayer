@@ -9,7 +9,7 @@
 #import "TYVideoPlayer.h"
 
 #ifdef DEBUG
-#   define TYDLog(fmt, ...) NSLog((@"%s [Line %d] \n" fmt), __FUNCTION__, __LINE__, ##__VA_ARGS__);
+#   define TYDLog(fmt, ...) NSLog((@"%s [Line %d] \n" fmt), __FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
 #   define TYDLog(...)
 #endif
@@ -150,8 +150,6 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)setState:(TYVideoPlayerState)state
 {
-    TYDLog(@"is MianThread %@",[NSThread isMainThread] ? @"YES":@"NO");
-    // TODO
     if ([_delegate respondsToSelector:@selector(videoPlayer:shouldChangeToState:)]){
         if (![_delegate videoPlayer:self shouldChangeToState:state]) {
             TYDLog(@"shouldChangeToState NO");
@@ -288,6 +286,8 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     switch (_state) {
         case TYVideoPlayerStateRequestStreamURL:
         case TYVideoPlayerStateContentLoading:
+        case TYVideoPlayerStateBuffering:
+        case TYVideoPlayerStateSeeking:
         case TYVideoPlayerStateContentPaused:
         case TYVideoPlayerStateStopped:
         case TYVideoPlayerStateError:
@@ -430,7 +430,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
                 if (_track.lastTimeInSeconds > _track.videoDuration) {
                     _track.lastTimeInSeconds = 0;
                 }
-                if (_track.continueLastWatchTime && _track.lastTimeInSeconds > 0) {
+                if (_track.continueLastWatchTime && _track.lastTimeInSeconds > 0 && _track.videoType != TYVideoPlayerTrackLIVE) {
                     [_playerItem seekToTime:CMTimeMakeWithSeconds(_track.lastTimeInSeconds, 1)];
                 }
                 self.player = [AVPlayer playerWithPlayerItem:_playerItem];
@@ -728,6 +728,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 {
     if (object == _player) {
         if ([keyPath isEqualToString:kTYVideoPlayerStatusKey]) {
+            TYDLog(@"playbackStatus");
             switch ([_player status]) {
                 case AVPlayerStatusReadyToPlay:
                     self.state = TYVideoPlayerStateContentReadyToPlay;
@@ -742,7 +743,9 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     }else if (object == _playerItem) {
         if ([keyPath isEqualToString:kTYVideoPlayerBufferEmptyKey]) {
             TYDLog(@"playbackBufferEmpty");
-            if (self.playerItem.isPlaybackBufferEmpty && [self currentTime] > 0 && [self currentTime] < [self duration] - 1 && _state == TYVideoPlayerStateContentPlaying) {
+            
+            BOOL isBufferEmpty = [self currentTime] > 0 && ( [self currentTime] < [self duration] - 1 || _track.videoType == TYVideoPlayerTrackLIVE);
+            if (self.playerItem.isPlaybackBufferEmpty && isBufferEmpty && _state == TYVideoPlayerStateContentPlaying) {
                 self.state = TYVideoPlayerStateBuffering;
             }
         }else if ([keyPath isEqualToString:kTYVideoPlayerLikelyToKeepUpKey]) {
@@ -757,6 +760,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
                 }
             }
         }else if ([keyPath isEqualToString:kTYVideoPlayerStatusKey]) {
+            TYDLog(@"playbackStatus");
             switch ([_playerItem status]) {
                 case AVPlayerItemStatusReadyToPlay:
                     self.state = TYVideoPlayerStateContentReadyToPlay;

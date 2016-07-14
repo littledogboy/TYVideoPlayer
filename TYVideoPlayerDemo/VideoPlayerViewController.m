@@ -22,7 +22,7 @@
     
     [self addVideoPlayerController];
     
-    [self loadVideo];
+    [self loadVodVideo];
 }
 
 - (void)viewWillLayoutSubviews
@@ -49,19 +49,57 @@
     _playerController = playerController;
 }
 
-- (void)loadVideo
+- (void)loadVodVideo
 {
     // 点播
-    //NSURL *streamURL = [NSURL URLWithString:@"http://down.233.com/2014_2015/2014/jzs1/jingji_zhenti_yjw/6-qllgl2v5x9b80vvgwgzzlnzydkj1bpr66hnool80.mp4"];
+    // http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8
+    NSURL *streamURL = [NSURL URLWithString:@"http://down.233.com/2014_2015/2014/jzs1/jingji_zhenti_yjw/6-qllgl2v5x9b80vvgwgzzlnzydkj1bpr66hnool80.mp4"];
     
     // 直播
-    NSURL *streamURL = [NSURL URLWithString:@"http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8"];
+//    NSURL *streamURL = [NSURL URLWithString:@"http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8"];
     
     // 本地播放
     //NSString* path = [[NSBundle mainBundle] pathForResource:@"test_264" ofType:@"mp4"];
     //NSURL* streamURL = [NSURL fileURLWithPath:path];
     
     [_playerController loadVideoWithStreamURL:streamURL];
+}
+
+- (void)loadLiveVideo
+{
+    // 直播
+    NSURL *streamURL = [NSURL URLWithString:@"http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8"];
+    
+    [_playerController loadVideoWithStreamURL:streamURL];
+}
+
+- (void)loadLocalVideo
+{
+    // 本地播放
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"test_264" ofType:@"mp4"];
+    if (path) {
+        NSURL* streamURL = [NSURL fileURLWithPath:path];
+        
+        [_playerController loadVideoWithStreamURL:streamURL];
+    }else {
+        UIAlertView *alerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"本地文件不存在！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alerView show];
+    }
+}
+
+
+#pragma mark - action
+
+- (IBAction)playVodAction:(id)sender {
+    [self loadVodVideo];
+}
+
+- (IBAction)playLiveAction:(id)sender {
+    [self loadLiveVideo];
+}
+
+- (IBAction)playLocalAction:(id)sender {
+    [self loadLocalVideo];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -74,7 +112,6 @@
         }else {
              _playerController.view.frame = CGRectMake(0, 0, MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds)), MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds))*9/16);
         }
-        
     }];
 }
 

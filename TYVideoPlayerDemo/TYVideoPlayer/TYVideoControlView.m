@@ -171,6 +171,13 @@
     _contentView.hidden = hidden;
 }
 
+- (void)setTimeSliderHidden:(BOOL)hidden
+{
+    _bottomView.curTimeLabel.hidden = hidden;
+    _bottomView.totalTimeLabel.hidden = hidden;
+    _bottomView.progressSlider.hidden = hidden;
+}
+
 #pragma mark - action
 
 - (void)sliderBeginDraging:(UISlider *)sender

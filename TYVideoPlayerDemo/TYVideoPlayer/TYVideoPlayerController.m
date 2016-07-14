@@ -280,6 +280,7 @@
         {
             NSString *time = [self covertToStringWithTime:[_videoPlayer duration]];
             [_controlView setTotalVideoTime:time];
+            [_controlView setTimeSliderHidden:_videoPlayer.track.videoType == TYVideoPlayerTrackLIVE];
             [self hideControlViewWithDelay:5.0];
             break;
         }
@@ -293,10 +294,10 @@
             [_controlView setPlayBtnState:YES];
             break;
         case TYVideoPlayerStateSeeking:
-            [self showLoadingView];;
+            [self showLoadingView];
             break;
         case TYVideoPlayerStateBuffering:
-            [self showLoadingView];;
+            [self showLoadingView];
             break;
         case TYVideoPlayerStateStopped:
             [self stopLoadingView];

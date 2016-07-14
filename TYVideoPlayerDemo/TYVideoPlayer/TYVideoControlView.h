@@ -56,7 +56,10 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 // hiden
 
 - (BOOL)contenViewHidden;
+
 - (void)setContenViewHidden:(BOOL)hidden; // 隐藏控制层View
+
+- (void)setTimeSliderHidden:(BOOL)hidden; // 隐藏 slider 和 time label 
 
 - (void)setPlayBtnHidden:(BOOL)hidden;
 

@@ -372,8 +372,8 @@
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
     [self stop];
     
-    if ([_delegate respondsToSelector:@selector(videoPlayerControllerShouldGoBack:)]
-         && ![_delegate videoPlayerControllerShouldGoBack:self]) {
+    if ([_delegate respondsToSelector:@selector(videoPlayerControllerShouldCustomGoBack:)]
+         && ![_delegate videoPlayerControllerShouldCustomGoBack:self]) {
         return;
     }
     

@@ -24,13 +24,6 @@
                                     <segue destination="zF0-OJ-29c" kind="show" id="751-dL-9OQ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pp-BD-Hty">
-                                <rect key="frame" x="241" y="198" width="118" height="30"/>
-                                <state key="normal" title="play Player Video"/>
-                                <connections>
-                                    <segue destination="HmK-Mh-yNO" kind="show" id="Vgw-ab-3UQ"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PwP-9R-q3c">
                                 <rect key="frame" x="229" y="258" width="142" height="30"/>
                                 <state key="normal" title="present Player Video"/>
@@ -43,6 +36,13 @@
                                 <state key="normal" title="push Player Video"/>
                                 <connections>
                                     <action selector="pushtVideoPlayerController:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YgU-cJ-HIa"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pp-BD-Hty">
+                                <rect key="frame" x="241" y="198" width="118" height="30"/>
+                                <state key="normal" title="play Player Video"/>
+                                <connections>
+                                    <segue destination="HmK-Mh-yNO" kind="show" id="Vgw-ab-3UQ"/>
                                 </connections>
                             </button>
                         </subviews>

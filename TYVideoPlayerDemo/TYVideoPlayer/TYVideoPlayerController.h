@@ -16,8 +16,8 @@
 - (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController readyToPlayURL:(NSURL *)streamURL;
 // 播放结束
 - (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController endToPlayURL:(NSURL *)streamURL;
-// 退出控制器 返回 是否退出
-- (BOOL)videoPlayerControllerShouldGoBack:(TYVideoPlayerController *)videoPlayerController;
+// 退出控制器 返回 是否自定义退出操作
+- (BOOL)videoPlayerControllerShouldCustomGoBack:(TYVideoPlayerController *)videoPlayerController;
 
 @end
 

@@ -86,10 +86,10 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 - (BOOL)videoPlayer:(TYVideoPlayer*)videoPlayer shouldChangeToState:(TYVideoPlayerState)toState;
 
 // 将要改变状态
-- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track willChangeToState:(TYVideoPlayerState)toState;
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track willChangeToState:(TYVideoPlayerState)toState fromState:(TYVideoPlayerState)fromState;
 
 // 已经改变状态
-- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeFromState:(TYVideoPlayerState)fromState;
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeToState:(TYVideoPlayerState)toState fromState:(TYVideoPlayerState)fromState;
 
 // 播放时间定时更新（s）
 - (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didUpdatePlayTime:(NSTimeInterval)playTime;

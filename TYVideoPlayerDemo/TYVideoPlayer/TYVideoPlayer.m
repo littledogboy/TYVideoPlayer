@@ -158,8 +158,8 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     }
     
     TYDLog(@"willChangeToState %@",[self descriptionState:state]);
-    if ([_delegate respondsToSelector:@selector(videoPlayer:track:willChangeToState:)]) {
-        [_delegate videoPlayer:self track:_track willChangeToState:state];
+    if ([_delegate respondsToSelector:@selector(videoPlayer:track:willChangeToState:fromState:)]) {
+        [_delegate videoPlayer:self track:_track willChangeToState:state fromState:_state];
     }
     
     TYVideoPlayerState oldState = _state;
@@ -240,8 +240,8 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     }
     
     TYDLog(@"didChangeFromState %@",[self descriptionState:oldState]);
-    if ([_delegate respondsToSelector:@selector(videoPlayer:track:didChangeFromState:)]) {
-        [_delegate videoPlayer:self track:_track didChangeFromState:oldState];
+    if ([_delegate respondsToSelector:@selector(videoPlayer:track:didChangeToState:fromState:)]) {
+        [_delegate videoPlayer:self track:_track didChangeToState:_state fromState:oldState];
     }
 }
 

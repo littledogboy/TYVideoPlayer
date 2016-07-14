@@ -385,13 +385,13 @@
 }
 #pragma mark - TYVideoPlayerDelegate
 
-- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeFromState:(TYVideoPlayerState)fromState
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeToState:(TYVideoPlayerState)toState fromState:(TYVideoPlayerState)fromState
 {
     // update UI
-    [self playerViewDidChangeToState:videoPlayer.state];
+    [self playerViewDidChangeToState:toState];
     
     // player control
-    [self player:videoPlayer didChangeToState:videoPlayer.state];
+    [self player:videoPlayer didChangeToState:toState];
     
     if (videoPlayer.state == TYVideoPlayerStateContentReadyToPlay
         && [_delegate respondsToSelector:@selector(videoPlayerController:readyToPlayURL:)]) {

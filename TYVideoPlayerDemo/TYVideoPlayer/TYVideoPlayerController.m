@@ -122,8 +122,6 @@
 {
     UITapGestureRecognizer *hideTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTapAction:)];
     [_controlView addGestureRecognizer:hideTap];
-    UITapGestureRecognizer *showTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTapAction:)];
-    [_playerView addGestureRecognizer:showTap];
 }
 
 #pragma mark - getter
@@ -171,8 +169,8 @@
 // show loadingView
 - (void)showLoadingView
 {
-    if (!_loadingView.isAnimating) {
-        [_controlView hidePlayBtn:YES];
+    if (!_loadingView.isAnimating && _videoPlayer.track.videoType != TYVideoPlayerTrackLocal) {
+        [_controlView setPlayBtnHidden:YES];
         [_loadingView startAnimation];
     }
 }
@@ -180,7 +178,7 @@
 - (void)stopLoadingView
 {
     if (_loadingView.isAnimating) {
-        [_controlView hidePlayBtn:NO];
+        [_controlView setPlayBtnHidden:NO];
         [_loadingView stopAnimation];
     }
 }
@@ -192,12 +190,12 @@
     
     if (animation) {
         [UIView animateWithDuration:0.3 animations:^{
-            _controlView.hidden = NO;
+            [_controlView setContenViewHidden:NO];
         }];
     }else {
-        _controlView.hidden = NO;
+        [_controlView setContenViewHidden:NO];
     }
-    [_controlView hidePlayBtn:[_loadingView isAnimating]];
+    [_controlView setPlayBtnHidden:[_loadingView isAnimating]];
 }
 
 - (void)hideControlViewWithAnimation:(BOOL)animation
@@ -206,10 +204,10 @@
     
     if (animation) {
         [UIView animateWithDuration:0.3 animations:^{
-            _controlView.hidden = YES;
+             [_controlView setContenViewHidden:YES];
         }];
     }else {
-        _controlView.hidden = YES;
+         [_controlView setContenViewHidden:YES];
     }
 }
 
@@ -224,7 +222,7 @@
 
 - (void)hideControlView
 {
-    if (!_controlView.hidden && !_isDraging) {
+    if (![_controlView contenViewHidden]  && !_isDraging) {
         [self hideControlViewWithAnimation:YES];
     };
 }
@@ -289,7 +287,7 @@
             [self hideErrorView];
             [_controlView setPlayBtnState:NO];
             [self stopLoadingView];
-            [_controlView hidePlayBtn:NO];
+            [_controlView setPlayBtnHidden:NO];
             break;
         case TYVideoPlayerStateContentPaused:
             [_controlView setPlayBtnState:YES];
@@ -302,11 +300,11 @@
             break;
         case TYVideoPlayerStateStopped:
             [self stopLoadingView];
-            [_controlView hidePlayBtn:YES];
+            [_controlView setPlayBtnHidden:YES];
             break;
         case TYVideoPlayerStateError:
             [self stopLoadingView];
-            [_controlView hidePlayBtn:YES];
+            [_controlView setPlayBtnHidden:YES];
             break;
         default:
             break;
@@ -351,7 +349,7 @@
 
 - (void)singleTapAction:(UITapGestureRecognizer *)tap
 {
-    if (_controlView.hidden) {
+    if ([_controlView contenViewHidden]) {
         [self showControlViewWithAnimation:YES];
     }else {
         [self hideControlViewWithAnimation:YES];

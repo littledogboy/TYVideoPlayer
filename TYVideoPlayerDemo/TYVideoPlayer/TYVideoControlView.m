@@ -20,8 +20,13 @@
 #define kSuspendBtnHeight 60
 
 @interface TYVideoControlView ()
+
+@property (nonatomic, weak) UIView *contentView;
+
 @property (nonatomic, weak) TYVideoTitleView *titleView;
+
 @property (nonatomic, weak) TYVideoBottomView *bottomView;
+
 @property (nonatomic, weak) UIButton *suspendBtn;
 
 @end
@@ -32,13 +37,13 @@
 {
     if (self = [super initWithFrame:frame]) {
         
+        [self addContentView];
+        
         [self addTitleView];
         
         [self addBottomView];
         
         [self addSuspendButton];
-        
-        
     }
     return self;
 }
@@ -46,6 +51,8 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
+        
+        [self addContentView];
         
         [self addTitleView];
         
@@ -58,11 +65,18 @@
 
 #pragma mark - add subvuew
 
+- (void)addContentView
+{
+    UIView *contentView = [[UIView alloc]init];
+    [self addSubview:contentView];
+    _contentView = contentView;
+}
+
 - (void)addTitleView
 {
     TYVideoTitleView *titleView = [[TYVideoTitleView alloc]init];
     [titleView.backBtn addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:titleView];
+    [_contentView addSubview:titleView];
     _titleView = titleView;
 }
 
@@ -75,7 +89,7 @@
     [bottomView.progressSlider addTarget:self action:@selector(sliderBeginDraging:) forControlEvents:UIControlEventTouchDown];
     [bottomView.progressSlider addTarget:self action:@selector(sliderIsDraging:) forControlEvents:UIControlEventValueChanged];
     [bottomView.progressSlider addTarget:self action:@selector(sliderEndDraging:) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside|UIControlEventTouchCancel];
-    [self addSubview:bottomView];
+    [_contentView addSubview:bottomView];
     _bottomView = bottomView;
 }
 
@@ -87,7 +101,7 @@
     [suspendBtn setBackgroundImage:[UIImage imageNamed:@"pauseBig"] forState:UIControlStateNormal];
     [suspendBtn setBackgroundImage:[UIImage imageNamed:@"playBig"] forState:UIControlStateSelected];
     [suspendBtn addTarget:self action:@selector(suspendAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:suspendBtn];
+    [_contentView addSubview:suspendBtn];
     _suspendBtn = suspendBtn;
 }
 
@@ -142,16 +156,25 @@
     _suspendBtn.selected = isPlayState;
 }
 
-- (void)hidePlayBtn:(BOOL)hidePlayBtn
+- (void)setPlayBtnHidden:(BOOL)hidden
 {
-    _suspendBtn.hidden = hidePlayBtn;
+    _suspendBtn.hidden = hidden;
+}
+
+- (BOOL)contenViewHidden
+{
+    return _contentView.hidden;
+}
+
+- (void)setContenViewHidden:(BOOL)hidden
+{
+    _contentView.hidden = hidden;
 }
 
 #pragma mark - action
 
 - (void)sliderBeginDraging:(UISlider *)sender
 {
-    NSLog(@"sliderBeginDraging");
     if ([_delegate respondsToSelector:@selector(videoControlView:state:sliderToProgress:)]) {
         [_delegate videoControlView:self state:TYSliderStateBegin sliderToProgress:sender.value];
     }
@@ -166,7 +189,6 @@
 
 - (void)sliderEndDraging:(UISlider *)sender
 {
-    NSLog(@"sliderEndDraging");
     if ([_delegate respondsToSelector:@selector(videoControlView:state:sliderToProgress:)]) {
         [_delegate videoControlView:self state:TYSliderStateEnd sliderToProgress:sender.value];
     }
@@ -191,9 +213,10 @@
 {
     [super layoutSubviews];
     
-    _titleView.frame = CGRectMake(0, kTitleViewTopEdge, CGRectGetWidth(self.frame), kTitleViewHight);
-    _bottomView.frame = CGRectMake(0, CGRectGetHeight(self.frame) - kBottomViewHeight - kBottomViewBottomEdge, CGRectGetWidth(self.frame), kBottomViewHeight);
-    _suspendBtn.center = self.center;
+    _contentView.frame = self.bounds;
+    _titleView.frame = CGRectMake(0, kTitleViewTopEdge, CGRectGetWidth(_contentView.frame), kTitleViewHight);
+    _bottomView.frame = CGRectMake(0, CGRectGetHeight(_contentView.frame) - kBottomViewHeight - kBottomViewBottomEdge, CGRectGetWidth(_contentView.frame), kBottomViewHeight);
+    _suspendBtn.center = _contentView.center;
 }
 
 @end

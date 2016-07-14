@@ -51,7 +51,16 @@
 
 - (void)loadVideo
 {
+    // 点播
     NSURL *streamURL = [NSURL URLWithString:@"http://down.233.com/2014_2015/2014/jzs1/jingji_zhenti_yjw/6-qllgl2v5x9b80vvgwgzzlnzydkj1bpr66hnool80.mp4"];
+    
+    // 直播
+    //NSURL *streamURL = [NSURL URLWithString:@"http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8"];
+    
+    // 本地播放
+    //    NSString* path = [[NSBundle mainBundle] pathForResource:@"test_264" ofType:@"mp4"];
+    //    NSURL* streamURL = [NSURL fileURLWithPath:path];
+    
     [_playerController loadVideoWithStreamURL:streamURL];
 }
 

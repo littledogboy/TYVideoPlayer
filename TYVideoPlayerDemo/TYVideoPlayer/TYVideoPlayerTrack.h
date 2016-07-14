@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, TYVideoPlayerTrackType) {
-    TYVideoPlayerTrackVOD, // 点播
-    TYVideoPlayerTrackLIVE,// 直播
+    TYVideoPlayerTrackVOD,  // 点播
+    TYVideoPlayerTrackLIVE, // 直播
+    TYVideoPlayerTrackLocal // 本地
 };
 
 /**

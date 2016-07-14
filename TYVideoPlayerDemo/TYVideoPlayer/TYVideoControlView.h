@@ -39,6 +39,8 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 
 @property (nonatomic, weak) id<TYVideoControlViewDelegate> delegate;
 
+// setter
+
 - (void)setTitle:(NSString *)title;
 
 - (void)setTotalVideoTime:(NSString *)time;
@@ -51,6 +53,11 @@ typedef NS_ENUM(NSUInteger, TYSliderState) {
 
 - (void)setPlayBtnState:(BOOL)isPlayState;
 
-- (void)hidePlayBtn:(BOOL)hidePlayBtn;
+// hiden
+
+- (BOOL)contenViewHidden;
+- (void)setContenViewHidden:(BOOL)hidden; // 隐藏控制层View
+
+- (void)setPlayBtnHidden:(BOOL)hidden;
 
 @end

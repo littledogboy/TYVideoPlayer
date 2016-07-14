@@ -413,8 +413,18 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
             NSError *error = nil;
             AVKeyValueStatus status = [URLAsset statusOfValueForKey:kTYVideoPlayerTracksKey error:&error];
             if (status == AVKeyValueStatusLoaded) {
-                _track.videoType = CMTimeGetSeconds([URLAsset duration]) == 0 ? TYVideoPlayerTrackLIVE : TYVideoPlayerTrackVOD;
-                _track.videoDuration = CMTimeGetSeconds([URLAsset duration]);
+                
+                Float64 duration = CMTimeGetSeconds([URLAsset duration]);
+                if ([streamURL isFileURL]) {
+                    _track.videoType = TYVideoPlayerTrackLocal;
+                    _track.videoDuration = duration;
+                }else if (duration == 0 || isnan(duration)) {
+                    _track.videoType = TYVideoPlayerTrackLIVE;
+                    _track.videoDuration = 0;
+                }else {
+                    _track.videoType = TYVideoPlayerTrackVOD;
+                    _track.videoDuration = duration;
+                }
                 
                 self.playerItem = [AVPlayerItem playerItemWithAsset:URLAsset];
                 if (_track.lastTimeInSeconds > _track.videoDuration) {
@@ -580,7 +590,11 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (NSTimeInterval)duration
 {
-    return CMTimeGetSeconds([self.player.currentItem duration]);
+    Float64 duration = CMTimeGetSeconds([self.player.currentItem duration]);
+    if (isnan(duration)) {
+        return 0;
+    }
+    return duration;
 }
 
 #pragma mark - private method

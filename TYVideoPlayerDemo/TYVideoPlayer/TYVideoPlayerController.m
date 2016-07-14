@@ -370,9 +370,13 @@
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideControlView) object:nil];
     [self stop];
-    if (_goBackHandle) {
-        _goBackHandle(self);
-    }else if (self.navigationController) {
+    
+    if ([_delegate respondsToSelector:@selector(videoPlayerControllerShouldGoBack:)]
+         && ![_delegate videoPlayerControllerShouldGoBack:self]) {
+        return;
+    }
+    
+    if (self.navigationController) {
         [self.navigationController popViewControllerAnimated:YES];
     }else {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -387,6 +391,11 @@
     
     // player control
     [self player:videoPlayer didChangeToState:videoPlayer.state];
+    
+    if (videoPlayer.state == TYVideoPlayerStateContentReadyToPlay
+        && [_delegate respondsToSelector:@selector(videoPlayerController:readyToPlayURL:)]) {
+        [_delegate videoPlayerController:self readyToPlayURL:videoPlayer.track.streamURL];
+    }
 }
 
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track didUpdatePlayTime:(NSTimeInterval)playTime
@@ -407,6 +416,10 @@
     [self showErrorViewWithTitle:@"重播" actionHandle:^{
         [weakSelf reloadVideo];
     }];
+    
+    if ([_delegate respondsToSelector:@selector(videoPlayerController:endToPlayURL:)]) {
+        [_delegate videoPlayerController:self endToPlayURL:videoPlayer.track.streamURL];
+    }
 }
 
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error

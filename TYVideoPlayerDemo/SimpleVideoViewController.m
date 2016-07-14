@@ -85,9 +85,9 @@
 
 #pragma mark - TYVideoPlayerDelegate
 
-- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeFromState:(TYVideoPlayerState)fromState
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeToState:(TYVideoPlayerState)toState fromState:(TYVideoPlayerState)fromState
 {
-    switch (videoPlayer.state) {
+    switch (toState) {
         case TYVideoPlayerStateContentReadyToPlay:
             //[videoPlayer seekToLastWatchTime];
             [videoPlayer play];

@@ -27,6 +27,12 @@
     [self presentViewController:playerController animated:YES completion:nil];
 }
 
+- (IBAction)pushtVideoPlayerController:(id)sender {
+    TYVideoPlayerController *playerController = [[TYVideoPlayerController alloc]init];
+    playerController.streamURL = [NSURL URLWithString:@"http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8"];
+    [self.navigationController pushViewController:playerController animated:YES];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

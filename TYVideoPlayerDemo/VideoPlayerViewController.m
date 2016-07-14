@@ -78,14 +78,13 @@
 {
     // 本地播放
     NSString* path = [[NSBundle mainBundle] pathForResource:@"test_264" ofType:@"mp4"];
-    if (path) {
-        NSURL* streamURL = [NSURL fileURLWithPath:path];
-        
-        [_playerController loadVideoWithStreamURL:streamURL];
-    }else {
+    if (!path) {
         UIAlertView *alerView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"本地文件不存在！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alerView show];
+        return;
     }
+    NSURL* streamURL = [NSURL fileURLWithPath:path];
+    [_playerController loadVideoWithStreamURL:streamURL];
 }
 
 

@@ -10,7 +10,7 @@
 #import "TYVideoPlayerController.h"
 #import <MediaPlayer/MediaPlayer.h>
 
-@interface VideoPlayerViewController ()
+@interface VideoPlayerViewController ()<TYVideoPlayerControllerDelegate>
 @property (nonatomic, weak) TYVideoPlayerController *playerController;
 @end
 
@@ -44,6 +44,7 @@
 - (void)addVideoPlayerController
 {
     TYVideoPlayerController *playerController = [[TYVideoPlayerController alloc]init];
+    playerController.delegate = self;
     [self addChildViewController:playerController];
     [self.view addSubview:playerController.view];
     _playerController = playerController;
@@ -101,6 +102,21 @@
 - (IBAction)playLocalAction:(id)sender {
     [self loadLocalVideo];
 }
+
+#pragma mark - delegate
+
+- (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController readyToPlayURL:(NSURL *)streamURL
+{
+    
+}
+
+- (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController endToPlayURL:(NSURL *)streamURL
+{
+    
+}
+
+
+#pragma mark - rotate
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {

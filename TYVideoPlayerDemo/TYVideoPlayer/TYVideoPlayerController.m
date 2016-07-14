@@ -268,6 +268,7 @@
 {
     switch (state) {
         case TYVideoPlayerStateRequestStreamURL:
+            [self hideErrorView];
             [self showLoadingView];
             if (_shouldAutoplayVideo) {
                 [self hideControlViewWithAnimation:NO];

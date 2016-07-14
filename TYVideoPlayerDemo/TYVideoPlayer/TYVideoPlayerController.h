@@ -21,6 +21,8 @@
 
 @end
 
+
+
 @interface TYVideoPlayerController : UIViewController
 
 @property (nonatomic, weak) id<TYVideoPlayerControllerDelegate> delegate;

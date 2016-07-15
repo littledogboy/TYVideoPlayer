@@ -29,6 +29,7 @@
 
 // 是否正在拖动slider
 @property (nonatomic, assign) BOOL isDraging;
+@property (nonatomic, assign) NSInteger curAutoRetryCount;
 
 @end
 
@@ -53,6 +54,7 @@
 - (void)configrePropertys
 {
     _shouldAutoplayVideo = YES;
+    _failedToAutoRetryCount = 2;
     _videoGravity = AVLayerVideoGravityResizeAspect;
 }
 
@@ -275,6 +277,16 @@
 
 #pragma mark - private
 
+- (BOOL)autoRetryLoadCurrentVideo
+{
+    if (_curAutoRetryCount++ < _failedToAutoRetryCount) {
+        NSLog(@"autoRetryLoadCurrentVideoCount %ld",_curAutoRetryCount);
+        [self reloadCurrentVideo];
+        return YES;
+    }
+    return NO;
+}
+
 - (void)playerViewDidChangeToState:(TYVideoPlayerState)state
 {
     switch (state) {
@@ -299,8 +311,8 @@
         case TYVideoPlayerStateContentPlaying:
             [self hideErrorView];
             [_controlView setPlayBtnState:NO];
-            [self stopLoadingView];
             [_controlView setPlayBtnHidden:NO];
+            [self stopLoadingView];
             break;
         case TYVideoPlayerStateContentPaused:
             [_controlView setPlayBtnState:YES];
@@ -331,6 +343,17 @@
         case TYVideoPlayerStateContentReadyToPlay:
             if (_shouldAutoplayVideo) {
                 [videoPlayer play];
+            }
+            break;
+        case TYVideoPlayerStateContentPlaying:
+            _curAutoRetryCount = 0;
+            break;
+        case TYVideoPlayerStateError:
+            if (![self autoRetryLoadCurrentVideo]) {
+                __weak typeof(self) weakSelf = self;
+                [self showErrorViewWithTitle:@"视频播放失败,重试" actionHandle:^{
+                    [weakSelf reloadCurrentVideo];
+                }];
             }
             break;
         default:
@@ -441,6 +464,10 @@
 {
     NSLog(@"videoPlayer receivedErrorCode %@",error);
     
+    if ([self autoRetryLoadCurrentVideo]) {
+        return;
+    }
+    
     [_controlView setPlayBtnHidden:YES];
     
     __weak typeof(self) weakSelf = self;
@@ -452,6 +479,10 @@
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedTimeout:(TYVideoPlayerTimeOut)timeout
 {
     NSLog(@"videoPlayer receivedTimeout %ld",timeout);
+    
+    if ([self autoRetryLoadCurrentVideo]) {
+        return;
+    }
     
     [_controlView setPlayBtnHidden:YES];
     
@@ -549,6 +580,7 @@
 - (void)dealloc
 {
     [self stop];
+    
     NSLog(@"TYVideoPlayerController dealloc");
 }
 

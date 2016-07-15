@@ -36,6 +36,8 @@
 @property (nonatomic, assign, readonly) BOOL isFullScreen;
 // 视频缩放
 @property (nonatomic, copy) NSString *videoGravity;
+// 播放失败自动重试，默认2次 ，0 为不重试
+@property (nonatomic, assign) NSInteger failedToAutoRetryCount;
 
 // 加载视频URL，如果在viewDidLoad之前设置了streamURL 在viewDidLoad中将会自动调用这个
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;

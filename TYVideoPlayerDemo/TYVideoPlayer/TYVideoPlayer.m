@@ -41,7 +41,6 @@ static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepU
 
 static const NSInteger kTYVideoPlayerTimeOut = 60;
 
-
 @interface TYVideoPlayer () {
     
     BOOL _isEndToSeek;
@@ -237,34 +236,6 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     TYDLog(@"didChangeFromState %@",[self descriptionState:oldState]);
     if ([_delegate respondsToSelector:@selector(videoPlayer:track:didChangeToState:fromState:)]) {
         [_delegate videoPlayer:self track:_track didChangeToState:_state fromState:oldState];
-    }
-}
-
-- (NSString *)descriptionState:(TYVideoPlayerState)state
-{
-    switch (state) {
-        case TYVideoPlayerStateUnknown:
-            return @"TYVideoPlayerStateUnknown";
-        case TYVideoPlayerStateRequestStreamURL:
-            return @"TYVideoPlayerStateRequestStreamURL";
-        case TYVideoPlayerStateContentLoading:
-            return @"TYVideoPlayerStateContentLoading";
-        case TYVideoPlayerStateContentReadyToPlay:
-            return @"TYVideoPlayerStateContentReadyToPlay";
-        case TYVideoPlayerStateContentPlaying:
-            return @"TYVideoPlayerStateContentPlaying";
-        case TYVideoPlayerStateContentPaused:
-            return @"TYVideoPlayerStateContentPaused";
-        case TYVideoPlayerStateBuffering:
-            return @"TYVideoPlayerStateBuffering";
-        case TYVideoPlayerStateSeeking:
-            return @"TYVideoPlayerStateSeeking";
-        case TYVideoPlayerStateStopped:
-            return @"TYVideoPlayerStateStopped";
-        case TYVideoPlayerStateError:
-            return @"TYVideoPlayerStateError";
-        default:
-            break;
     }
 }
 
@@ -661,7 +632,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 {
     dispatch_main_async_safe_ty(^{
         if ([_delegate respondsToSelector:@selector(videoPlayer:track:receivedTimeout:)]) {
-            TYDLog(@"receivedTimeout %ld",timeOut);
+            TYDLog(@"receivedTimeout %@",[self descriptionTimeOut:timeOut]);
             [_delegate videoPlayer:self track:_track receivedTimeout:timeOut];
         }
     });
@@ -672,6 +643,51 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(URLAssetTimeOut) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(seekingTimeOut) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(bufferingTimeOut) object:nil];
+}
+
+#pragma mark - state description
+
+// description
+- (NSString *)descriptionState:(TYVideoPlayerState)state
+{
+    switch (state) {
+        case TYVideoPlayerStateUnknown:
+            return @"TYVideoPlayerStateUnknown";
+        case TYVideoPlayerStateRequestStreamURL:
+            return @"TYVideoPlayerStateRequestStreamURL";
+        case TYVideoPlayerStateContentLoading:
+            return @"TYVideoPlayerStateContentLoading";
+        case TYVideoPlayerStateContentReadyToPlay:
+            return @"TYVideoPlayerStateContentReadyToPlay";
+        case TYVideoPlayerStateContentPlaying:
+            return @"TYVideoPlayerStateContentPlaying";
+        case TYVideoPlayerStateContentPaused:
+            return @"TYVideoPlayerStateContentPaused";
+        case TYVideoPlayerStateBuffering:
+            return @"TYVideoPlayerStateBuffering";
+        case TYVideoPlayerStateSeeking:
+            return @"TYVideoPlayerStateSeeking";
+        case TYVideoPlayerStateStopped:
+            return @"TYVideoPlayerStateStopped";
+        case TYVideoPlayerStateError:
+            return @"TYVideoPlayerStateError";
+        default:
+            break;
+    }
+}
+
+- (NSString *)descriptionTimeOut:(TYVideoPlayerTimeOut)timeOut
+{
+    switch (timeOut) {
+        case TYVideoPlayerTimeOutLoad:
+            return @"TYVideoPlayerTimeOutLoad";
+        case TYVideoPlayerTimeOutSeek:
+            return @"TYVideoPlayerTimeOutSeek";
+        case TYVideoPlayerTimeOutBuffer:
+            return @"TYVideoPlayerTimeOutBuffer";
+        default:
+            break;
+    }
 }
 
 #pragma mark - add & remove notification
@@ -750,7 +766,6 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     }else if (object == _playerItem) {
         if ([keyPath isEqualToString:kTYVideoPlayerBufferEmptyKey]) {
             TYDLog(@"playbackBufferEmpty");
-            
             BOOL isBufferEmpty = [self currentTime] > 0 && ( [self currentTime] < [self duration] - 1 || _track.videoType == TYVideoPlayerTrackLIVE);
             if (self.playerItem.isPlaybackBufferEmpty && isBufferEmpty && _state == TYVideoPlayerStateContentPlaying) {
                 self.state = TYVideoPlayerStateBuffering;
@@ -817,10 +832,10 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 -(void)routeChange:(NSNotification *)notification
 {
-    NSDictionary *dic=notification.userInfo;
+    NSDictionary *dic = notification.userInfo;
     int changeReason= [dic[AVAudioSessionRouteChangeReasonKey] intValue];
     //等于AVAudioSessionRouteChangeReasonOldDeviceUnavailable表示旧输出不可用
-    if (changeReason==AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
+    if (changeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable) {
         AVAudioSessionRouteDescription *routeDescription=dic[AVAudioSessionRouteChangePreviousRouteKey];
         AVAudioSessionPortDescription *portDescription= [routeDescription.outputs firstObject];
         //原设备为耳机则暂停
@@ -837,13 +852,14 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 -(void)routeInterrypt:(NSNotification *)notification
 {
-    NSDictionary *dic=notification.userInfo;
+    NSDictionary *dic = notification.userInfo;
     int changeReason= [dic[AVAudioSessionRouteChangeReasonKey] intValue];
-    if (changeReason==AVAudioSessionRouteChangeReasonUnknown) {
+    if (changeReason == AVAudioSessionRouteChangeReasonUnknown) {
         if (_state == TYVideoPlayerStateContentPlaying) {
             [self pauseContent];
         }
         // TODO 有来电则不恢复播放
+        
         if (_track.isPlayedToEnd) {
             return;
         }
@@ -864,7 +880,3 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 }
 
 @end
-
-
-
-

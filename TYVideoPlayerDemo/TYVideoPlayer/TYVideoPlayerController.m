@@ -53,6 +53,7 @@
 - (void)configrePropertys
 {
     _shouldAutoplayVideo = YES;
+    _videoGravity = AVLayerVideoGravityResizeAspect;
 }
 
 #pragma mark - life cycle
@@ -97,6 +98,7 @@
 {
     TYVideoPlayerView *playerView = [[TYVideoPlayerView alloc]init];
     playerView.backgroundColor = [UIColor blackColor];
+    playerView.playerLayer.videoGravity = _videoGravity;
     [self.view addSubview:playerView];
     _playerView = playerView;
 }
@@ -129,6 +131,15 @@
 - (BOOL)isFullScreen
 {
     return [[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeLeft || [[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationLandscapeRight;
+}
+
+- (void)setVideoGravity:(NSString *)videoGravity
+{
+    _videoGravity = videoGravity;
+    
+    if (_playerView) {
+        _playerView.playerLayer.videoGravity = videoGravity;
+    }
 }
 
 #pragma mark - video player

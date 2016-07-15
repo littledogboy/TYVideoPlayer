@@ -34,6 +34,8 @@
 @property (nonatomic, assign) BOOL shouldAutoplayVideo;
 // 是否全屏
 @property (nonatomic, assign, readonly) BOOL isFullScreen;
+// 视频缩放
+@property (nonatomic, copy) NSString *videoGravity;
 
 // 加载视频URL，如果在viewDidLoad之前设置了streamURL 在viewDidLoad中将会自动调用这个
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;

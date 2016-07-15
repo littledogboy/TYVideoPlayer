@@ -109,7 +109,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 @property (nonatomic, strong, readonly) AVPlayerItem* playerItem;
 
-@property (nonatomic, strong, readonly) NSObject<TYVideoPlayerTrack> *track;
+@property (nonatomic, strong, readonly) id<TYVideoPlayerTrack> track;
 
 @property (nonatomic, weak, readonly) UIView<TYPlayerLayer> *playerLayerView;
 

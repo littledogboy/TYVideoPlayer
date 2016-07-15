@@ -106,25 +106,19 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)setPlayerItem:(AVPlayerItem *)playerItem
 {
-    if (_playerItem) {
-        [self removePlayerItemObservers:_playerItem];
-    }
+    [self removePlayerItemObservers:_playerItem];
     
     _playerItem = playerItem;
     if (!playerItem) {
         return;
     }
     [self addPlayerItemObservers:playerItem];
-    
 }
 
 - (void)setPlayer:(AVPlayer *)player
 {
     self.timeObserver = nil;
-    if (_player) {
-        [_player replaceCurrentItemWithPlayerItem:nil];
-        [_player removeObserver:self forKeyPath:kTYVideoPlayerStatusKey];
-    }
+    [self removePlayerObservers:_player];
     
     _player = player;
     if (!player) {
@@ -145,6 +139,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 - (void)setTrack:(id<TYVideoPlayerTrack>)track
 {
     [self clearVideoPlayer];
+    
     _track = track;
 }
 
@@ -275,33 +270,6 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 #pragma mark - load video URL
 
-- (void)reloadCurrentVideoTrackContinueLastTime:(BOOL)continueLastTime
-{
-    _track.continueLastWatchTime = continueLastTime;
-    [self reloadCurrentVideoTrack];
-}
-
-- (void)reloadCurrentVideoTrack
-{
-    switch (_state) {
-        case TYVideoPlayerStateRequestStreamURL:
-        case TYVideoPlayerStateContentLoading:
-        case TYVideoPlayerStateBuffering:
-        case TYVideoPlayerStateSeeking:
-        case TYVideoPlayerStateContentPaused:
-        case TYVideoPlayerStateStopped:
-        case TYVideoPlayerStateError:
-            [self reloadVideoTrack:_track];
-            break;
-        case TYVideoPlayerStateContentPlaying:
-            [self pauseContent];
-            [self reloadVideoTrack:_track];
-            break;
-        default:
-            break;
-    }
-}
-
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL
 {
     [self loadVideoWithStreamURL:streamURL playerLayerView:nil];
@@ -320,7 +288,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView
 {
-    if (_track && _state != TYVideoPlayerStateError) {
+    if (_track && (_state != TYVideoPlayerStateError || _state != TYVideoPlayerStateUnknown)) {
         [self stop];
     }
     
@@ -346,6 +314,29 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
         default:
             break;
     };
+}
+
+- (void)reloadCurrentVideoTrack
+{
+    void (^completionBlock)() = ^{
+        [self reloadVideoTrack:_track];
+    };
+    switch (_state) {
+        case TYVideoPlayerStateRequestStreamURL:
+        case TYVideoPlayerStateContentLoading:
+        case TYVideoPlayerStateBuffering:
+        case TYVideoPlayerStateSeeking:
+        case TYVideoPlayerStateContentPaused:
+        case TYVideoPlayerStateStopped:
+        case TYVideoPlayerStateError:
+            completionBlock();
+            break;
+        case TYVideoPlayerStateContentPlaying:
+            [self pauseContentCompletion:completionBlock];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)playVideoWithTrack:(id<TYVideoPlayerTrack>)track
@@ -687,11 +678,17 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)addRouteObservers
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self removeRouteObservers];
     
     //添加耳机插入、拔出监听控制
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routeChange:) name:AVAudioSessionRouteChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(routeInterrypt:) name:AVAudioSessionInterruptionNotification object:nil];
+}
+
+- (void)removeRouteObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionRouteChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVAudioSessionInterruptionNotification object:nil];
 }
 
 - (void)addPlayerTimeObserver
@@ -714,12 +711,22 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)removePlayerItemObservers:(AVPlayerItem *)playerItem
 {
-    [playerItem removeObserver:self forKeyPath:kTYVideoPlayerStatusKey];
-    [playerItem removeObserver:self forKeyPath:kTYVideoPlayerBufferEmptyKey];
-    [playerItem removeObserver:self forKeyPath:kTYVideoPlayerLikelyToKeepUpKey];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemFailedToPlayToEndTimeNotification object:playerItem];
+    if (playerItem) {
+        [playerItem removeObserver:self forKeyPath:kTYVideoPlayerStatusKey];
+        [playerItem removeObserver:self forKeyPath:kTYVideoPlayerBufferEmptyKey];
+        [playerItem removeObserver:self forKeyPath:kTYVideoPlayerLikelyToKeepUpKey];
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemFailedToPlayToEndTimeNotification object:playerItem];
+    }
+}
+
+- (void)removePlayerObservers:(AVPlayer *)player
+{
+    if (player) {
+        [player replaceCurrentItemWithPlayerItem:nil];
+        [player removeObserver:self forKeyPath:kTYVideoPlayerStatusKey];
+    }
 }
 
 #pragma mark - notification observers
@@ -849,6 +856,8 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)dealloc
 {
+    [self removeRouteObservers];
+    
     [self clearVideoPlayer];
     
     TYDLog(@"TYVideoPlayer dealloc");

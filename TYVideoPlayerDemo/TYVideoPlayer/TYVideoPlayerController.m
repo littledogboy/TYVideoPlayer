@@ -424,6 +424,9 @@
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track
 {
     NSLog(@"播放完成！");
+    
+    [_controlView setPlayBtnHidden:YES];
+    
     __weak typeof(self) weakSelf = self;
     [self showErrorViewWithTitle:@"重播" actionHandle:^{
         [weakSelf reloadVideo];
@@ -437,6 +440,9 @@
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
 {
     NSLog(@"videoPlayer receivedErrorCode %@",error);
+    
+    [_controlView setPlayBtnHidden:YES];
+    
     __weak typeof(self) weakSelf = self;
     [self showErrorViewWithTitle:@"视频播放失败,重试" actionHandle:^{
         [weakSelf reloadCurrentVideo];
@@ -446,6 +452,9 @@
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedTimeout:(TYVideoPlayerTimeOut)timeout
 {
     NSLog(@"videoPlayer receivedTimeout %ld",timeout);
+    
+    [_controlView setPlayBtnHidden:YES];
+    
     __weak typeof(self) weakSelf = self;
     [self showErrorViewWithTitle:@"视频播放超时,重试" actionHandle:^{
         [weakSelf reloadCurrentVideo];

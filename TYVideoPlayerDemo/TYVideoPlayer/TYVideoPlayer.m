@@ -809,7 +809,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     
     if ([self isPlaying] && _isEndToSeek) {
         _track.videoTime = timeInSeconds;
-        TYDLog(@"timeInSeconds %ld",(NSInteger)timeInSeconds);
+        //TYDLog(@"timeInSeconds %ld",(NSInteger)timeInSeconds);
         if ([_delegate respondsToSelector:@selector(videoPlayer:track:didUpdatePlayTime:)]) {
             [_delegate videoPlayer:self track:_track didUpdatePlayTime:timeInSeconds];
         }

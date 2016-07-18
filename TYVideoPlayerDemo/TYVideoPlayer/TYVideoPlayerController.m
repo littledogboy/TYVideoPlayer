@@ -89,9 +89,22 @@
     [_controlView setFullScreen:self.isFullScreen];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    if (!self.isFullScreen) {
+        return NO;
+    }
+    return [self isControlViewHidden];
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (UIStatusBarAnimation )preferredStatusBarUpdateAnimation
+{
+    return UIStatusBarAnimationFade;
 }
 
 #pragma mark - add subview
@@ -203,10 +216,10 @@
     
     if (animation) {
         [UIView animateWithDuration:0.3 animations:^{
-            [_controlView setContenViewHidden:NO];
+            [self setControlViewHidden:NO];
         }];
     }else {
-        [_controlView setContenViewHidden:NO];
+        [self setControlViewHidden:NO];
     }
     [_controlView setPlayBtnHidden:[_loadingView isAnimating]];
 }
@@ -217,11 +230,22 @@
     
     if (animation) {
         [UIView animateWithDuration:0.3 animations:^{
-             [_controlView setContenViewHidden:YES];
+            [self setControlViewHidden:YES];
         }];
     }else {
-         [_controlView setContenViewHidden:YES];
+        [self setControlViewHidden:YES];
     }
+}
+
+- (void)setControlViewHidden:(BOOL)hidden
+{
+    [_controlView setContentViewHidden:hidden];
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (BOOL)isControlViewHidden
+{
+    return [_controlView contentViewHidden];
 }
 
 - (void)hideControlViewWithDelay:(CGFloat)delay
@@ -235,7 +259,7 @@
 
 - (void)hideControlView
 {
-    if (![_controlView contenViewHidden]  && !_isDraging) {
+    if (![self isControlViewHidden]  && !_isDraging) {
         [self hideControlViewWithAnimation:YES];
     };
 }
@@ -344,6 +368,9 @@
             if (_shouldAutoplayVideo) {
                 [videoPlayer play];
             }
+            if ([_delegate respondsToSelector:@selector(videoPlayerController:readyToPlayURL:)]) {
+                [_delegate videoPlayerController:self readyToPlayURL:videoPlayer.track.streamURL];
+            }
             break;
         case TYVideoPlayerStateContentPlaying:
             _curAutoRetryCount = 0;
@@ -358,6 +385,13 @@
             break;
         default:
             break;
+    }
+}
+
+- (void)handelControllerEvent:(TYVideoPlayerControllerEvent)event
+{
+    if ([_delegate respondsToSelector:@selector(videoPlayerController:handleEvent:)]) {
+        [_delegate videoPlayerController:self handleEvent:event];
     }
 }
 
@@ -385,11 +419,12 @@
 
 - (void)singleTapAction:(UITapGestureRecognizer *)tap
 {
-    if ([_controlView contenViewHidden]) {
+    if ([self isControlViewHidden]) {
         [self showControlViewWithAnimation:YES];
     }else {
         [self hideControlViewWithAnimation:YES];
     }
+    [self handelControllerEvent:TYVideoPlayerControllerEventTapScreen];
 }
 
 - (void)goBackAction
@@ -407,7 +442,7 @@
     [self stop];
     
     if ([_delegate respondsToSelector:@selector(videoPlayerControllerShouldCustomGoBack:)]
-         && ![_delegate videoPlayerControllerShouldCustomGoBack:self]) {
+         && [_delegate videoPlayerControllerShouldCustomGoBack:self]) {
         return;
     }
     
@@ -426,11 +461,6 @@
     
     // player control
     [self player:videoPlayer didChangeToState:toState];
-    
-    if (videoPlayer.state == TYVideoPlayerStateContentReadyToPlay
-        && [_delegate respondsToSelector:@selector(videoPlayerController:readyToPlayURL:)]) {
-        [_delegate videoPlayerController:self readyToPlayURL:videoPlayer.track.streamURL];
-    }
 }
 
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track didUpdatePlayTime:(NSTimeInterval)playTime
@@ -514,15 +544,19 @@
             break;
         case TYVideoControlEventFullScreen:
             [self changeToOrientation:UIInterfaceOrientationLandscapeRight];
+            [self handelControllerEvent:TYVideoPlayerControllerEventRotateScreen];
             break;
         case TYVideoControlEventNormalScreen:
             [self changeToOrientation:UIInterfaceOrientationPortrait];
+            [self handelControllerEvent:TYVideoPlayerControllerEventRotateScreen];
             break;
         case TYVideoControlEventPlay:
             [self play];
+            [self handelControllerEvent:TYVideoPlayerControllerEventPlay];
             break;
         case TYVideoControlEventSuspend:
             [self pause];
+            [self handelControllerEvent:TYVideoPlayerControllerEventSuspend];
             break;
         default:
             break;

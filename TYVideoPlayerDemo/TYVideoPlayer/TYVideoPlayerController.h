@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, TYVideoPlayerControllerEvent) {
+    TYVideoPlayerControllerEventRotateScreen,   // 旋转屏幕 isFullScreen
+    TYVideoPlayerControllerEventTapScreen,      // 单击屏幕 isControlViewHidden
+    TYVideoPlayerControllerEventPlay,           // 播放
+    TYVideoPlayerControllerEventSuspend,        // 暂停
+};
+
 @class TYVideoPlayerController;
 @protocol TYVideoPlayerControllerDelegate <NSObject>
 @optional
@@ -16,7 +23,11 @@
 - (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController readyToPlayURL:(NSURL *)streamURL;
 // 播放结束
 - (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController endToPlayURL:(NSURL *)streamURL;
-// 退出控制器 返回 是否自定义退出操作
+
+// 事件
+- (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController handleEvent:(TYVideoPlayerControllerEvent)event;
+
+// 是否自定义退出控制器操作
 - (BOOL)videoPlayerControllerShouldCustomGoBack:(TYVideoPlayerController *)videoPlayerController;
 
 @end
@@ -34,6 +45,8 @@
 @property (nonatomic, assign) BOOL shouldAutoplayVideo;
 // 是否全屏
 @property (nonatomic, assign, readonly) BOOL isFullScreen;
+// 控制层是否隐藏
+@property (nonatomic, assign, readonly) BOOL isControlViewHidden;
 // 视频缩放
 @property (nonatomic, copy) NSString *videoGravity;
 // 播放失败自动重试，默认2次 ，0 为不重试

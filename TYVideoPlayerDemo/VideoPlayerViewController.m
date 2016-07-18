@@ -28,17 +28,30 @@
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    CGRect bounds = self.view.frame;
+    CGRect frame = self.view.frame;
     if (_playerController.isFullScreen) {
-        _playerController.view.frame = CGRectMake(0, 0, MAX(CGRectGetHeight(bounds), CGRectGetWidth(bounds)), MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds)));
+        _playerController.view.frame = CGRectMake(0, 0, MAX(CGRectGetHeight(frame), CGRectGetWidth(frame)), MIN(CGRectGetHeight(frame), CGRectGetWidth(frame)));
     }else {
-         _playerController.view.frame = CGRectMake(0, 0, MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds)), MIN(CGRectGetHeight(bounds), CGRectGetWidth(bounds))*9/16);
+         _playerController.view.frame = CGRectMake(0, 0, MIN(CGRectGetHeight(frame), CGRectGetWidth(frame)), MIN(CGRectGetHeight(frame), CGRectGetWidth(frame))*9/16);
     }
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    if (!_playerController || !_playerController.isFullScreen) {
+        return NO;
+    }
+    return [_playerController isControlViewHidden];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (UIStatusBarAnimation )preferredStatusBarUpdateAnimation
+{
+    return UIStatusBarAnimationFade;
 }
 
 - (void)addVideoPlayerController
@@ -107,11 +120,22 @@
     
 }
 
+- (void)videoPlayerController:(TYVideoPlayerController *)videoPlayerController handleEvent:(TYVideoPlayerControllerEvent)event
+{
+    switch (event) {
+        case TYVideoPlayerControllerEventTapScreen:
+            [self setNeedsStatusBarAppearanceUpdate];
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark - rotate
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    //发生在翻转开始之前。
+    //发生在翻转开始之前
     CGRect bounds = self.view.frame;
     [UIView animateWithDuration:duration animations:^{
         if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {

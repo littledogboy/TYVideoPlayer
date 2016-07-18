@@ -161,12 +161,12 @@
     _suspendBtn.hidden = hidden;
 }
 
-- (BOOL)contenViewHidden
+- (BOOL)contentViewHidden
 {
     return _contentView.hidden;
 }
 
-- (void)setContenViewHidden:(BOOL)hidden
+- (void)setContentViewHidden:(BOOL)hidden
 {
     _contentView.hidden = hidden;
 }

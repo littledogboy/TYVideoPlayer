@@ -35,6 +35,7 @@ static NSString *const kTYVideoPlayerTracksKey = @"tracks";
 static NSString *const kTYVideoPlayerPlayableKey = @"playable";
 static NSString *const kTYVideoPlayerDurationKey = @"duration";
 
+// playerItem KVO
 static NSString *const kTYVideoPlayerStatusKey = @"status";
 static NSString *const kTYVideoPlayerBufferEmptyKey = @"playbackBufferEmpty";
 static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepUp";
@@ -45,9 +46,11 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     
     BOOL _isEndToSeek;
     
-    NSInteger _loadingTimeOut;
-    NSInteger _seekingTimeOut;
-    NSInteger _bufferingTimeOut;
+    NSInteger _loadingTimeOut;  // 初始化加载超时时间
+    
+    NSInteger _seekingTimeOut;  // seek 超时时间
+    
+    NSInteger _bufferingTimeOut;// 缓冲超时时间
 }
 
 @property (nonatomic, strong) AVPlayer *player;
@@ -453,7 +456,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
                 self.state = TYVideoPlayerStateError;
                 return;
             case AVPlayerItemStatusUnknown:
-                NSLog(@"Trying to pause content but AVPlayerItemStatusUnknown.");
+                TYDLog(@"Trying to pause content but AVPlayerItemStatusUnknown.");
                 self.state = TYVideoPlayerStateContentLoading;
                 if (completion) completion();
                 return;
@@ -466,7 +469,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
                 self.state = TYVideoPlayerStateError;
                 return;
             case AVPlayerStatusUnknown:
-                NSLog(@"Trying to pause content but AVPlayerStatusUnknown.");
+                TYDLog(@"Trying to pause content but AVPlayerStatusUnknown.");
                 self.state = TYVideoPlayerStateContentLoading;
                 return;
             default:

@@ -67,10 +67,8 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 };
 
 @class TYVideoPlayer;
-
 // 视频播放代理
 @protocol TYVideoPlayerDelegate <NSObject>
-
 @optional
 
 // 是否应该播放
@@ -99,10 +97,12 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 // 播放出错
 - (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error;
-
 @end
 
-// 视频播放类
+
+/**
+ *  视频播放类
+ */
 @interface TYVideoPlayer : NSObject
 
 @property (nonatomic, strong, readonly) AVPlayer *player;
@@ -148,6 +148,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 - (void)seekToTime:(NSTimeInterval)time;
 
+/** seek 到上次观看的时间 */
 - (void)seekToLastWatchTime;
 
 // time
@@ -158,10 +159,11 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 
 // timeout time, default 60s
 
-- (void)setLoadingTimeOutTime:(NSUInteger)time; // 开始加载超时时间
+/** 初始化加载超时时间 */
+- (void)setLoadingTimeOutTime:(NSUInteger)time;
 
-- (void)setSeekTimeOutTime:(NSUInteger)time;    // seek超时时间
+- (void)setSeekTimeOutTime:(NSUInteger)time;
 
-- (void)setBufferTimeOutTime:(NSUInteger)time;  // 缓冲超时时间
+- (void)setBufferTimeOutTime:(NSUInteger)time;
 
 @end

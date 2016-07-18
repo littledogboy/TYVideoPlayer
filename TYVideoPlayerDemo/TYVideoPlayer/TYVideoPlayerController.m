@@ -528,7 +528,7 @@
 {
      switch (event) {
          case TYVideoControlEventPlay:
-             return _videoPlayer.state == TYVideoPlayerStateContentPaused;
+             return _videoPlayer.state == TYVideoPlayerStateContentPaused || _videoPlayer.state == TYVideoPlayerStateContentReadyToPlay;
          case TYVideoControlEventSuspend:
              return [_videoPlayer isPlaying];
          default:
@@ -583,7 +583,7 @@
             NSString *time = [self covertToStringWithTime:sliderTime];
             [_videoPlayer seekToTime:sliderTime];
             [_controlView setCurrentVideoTime:time];
-            //[self hideControlViewWithAnimation:YES];
+            [self hideControlViewWithAnimation:YES];
             break;
         }
         default:

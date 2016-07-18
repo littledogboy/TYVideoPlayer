@@ -36,6 +36,22 @@
     return self;
 }
 
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        
+        [self addCurrentTimeLabel];
+        
+        [self addTotalTimeLabel];
+        
+        [self addFullScreenBtn];
+        
+        [self addProgressSlider];
+    }
+    return self;
+}
+
 - (void)addCurrentTimeLabel
 {
     UILabel *curTimeLabel = [[UILabel alloc]init];

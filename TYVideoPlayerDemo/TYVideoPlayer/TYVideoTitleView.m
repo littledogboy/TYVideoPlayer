@@ -29,6 +29,17 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        
+        [self addBackButton];
+        
+        [self addTitleLabel];
+    }
+    return self;
+}
+
 - (void)addBackButton
 {
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];

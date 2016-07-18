@@ -41,7 +41,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerControllerEvent) {
 @property (nonatomic, strong) NSString *videoTitle;
 // 播放地址
 @property (nonatomic, strong) NSURL *streamURL;
-// 加载完视频是否自动播放
+// 加载完视频是否自动播放 默认YES
 @property (nonatomic, assign) BOOL shouldAutoplayVideo;
 // 是否全屏
 @property (nonatomic, assign, readonly) BOOL isFullScreen;

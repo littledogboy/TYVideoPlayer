@@ -96,6 +96,7 @@
 - (void)addSuspendButton
 {
     UIButton *suspendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    suspendBtn.selected = YES;
     suspendBtn.frame = CGRectMake(0, 0, kSuspendBtnHeight, kSuspendBtnHeight);
     suspendBtn.adjustsImageWhenHighlighted = NO;
     [suspendBtn setBackgroundImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_pauseBig"] forState:UIControlStateNormal];

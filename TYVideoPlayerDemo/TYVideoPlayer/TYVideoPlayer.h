@@ -38,7 +38,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerTimeOut) {
     TYVideoPlayerTimeOutLoad,
     // seek超时
     TYVideoPlayerTimeOutSeek,
-    // 卡顿超时
+    // 缓存超时
     TYVideoPlayerTimeOutBuffer,
 };
 

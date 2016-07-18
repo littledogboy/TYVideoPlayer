@@ -57,6 +57,7 @@
 - (void)addVideoPlayerController
 {
     TYVideoPlayerController *playerController = [[TYVideoPlayerController alloc]init];
+    //playerController.shouldAutoplayVideo = NO;
     playerController.delegate = self;
     [self addChildViewController:playerController];
     [self.view addSubview:playerController.view];

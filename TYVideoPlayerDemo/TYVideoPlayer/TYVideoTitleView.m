@@ -43,7 +43,7 @@
 - (void)addBackButton
 {
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backBtn setImage:[UIImage imageNamed:@"back-icon"] forState:UIControlStateNormal];
+    [backBtn setImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_back"] forState:UIControlStateNormal];
     [self addSubview:backBtn];
     _backBtn = backBtn;
 }

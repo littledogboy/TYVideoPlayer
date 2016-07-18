@@ -98,8 +98,8 @@
     UIButton *suspendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     suspendBtn.frame = CGRectMake(0, 0, kSuspendBtnHeight, kSuspendBtnHeight);
     suspendBtn.adjustsImageWhenHighlighted = NO;
-    [suspendBtn setBackgroundImage:[UIImage imageNamed:@"pauseBig"] forState:UIControlStateNormal];
-    [suspendBtn setBackgroundImage:[UIImage imageNamed:@"playBig"] forState:UIControlStateSelected];
+    [suspendBtn setBackgroundImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_pauseBig"] forState:UIControlStateNormal];
+    [suspendBtn setBackgroundImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_playBig"] forState:UIControlStateSelected];
     [suspendBtn addTarget:self action:@selector(suspendAction:) forControlEvents:UIControlEventTouchUpInside];
     [_contentView addSubview:suspendBtn];
     _suspendBtn = suspendBtn;

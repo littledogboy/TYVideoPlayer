@@ -75,7 +75,7 @@
 - (void)addFullScreenBtn
 {
     UIButton *fullScreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [fullScreenBtn setImage:[UIImage imageNamed:@"miniplayer_fullsize"] forState:UIControlStateNormal];
+    [fullScreenBtn setImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_fullsize"] forState:UIControlStateNormal];
     [self addSubview:fullScreenBtn];
     _fullScreenBtn = fullScreenBtn;
 }
@@ -85,7 +85,7 @@
     UISlider *progressSlider = [[UISlider alloc]init];
     progressSlider.minimumTrackTintColor = [UIColor colorWithRed:252/225. green:110/255. blue:102/255. alpha:0.9];
     progressSlider.maximumTrackTintColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:0.5];
-    [progressSlider setThumbImage:[UIImage imageNamed:@"fullplayer_point"] forState:UIControlStateNormal];
+    [progressSlider setThumbImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_point"] forState:UIControlStateNormal];
     [self addSubview:progressSlider];
     _progressSlider = progressSlider;
 }

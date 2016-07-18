@@ -50,7 +50,7 @@
 - (void)addBackButton
 {
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backBtn setImage:[UIImage imageNamed:@"back-icon"] forState:UIControlStateNormal];
+    [backBtn setImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_back"] forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:backBtn];
     _backBtn = backBtn;
@@ -69,7 +69,7 @@
 - (void)addMsgButton
 {
     UIButton *msgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [msgBtn setImage:[UIImage imageNamed:@"replay"] forState:UIControlStateNormal];
+    [msgBtn setBackgroundImage:[UIImage imageNamed:@"TYVideoPlayer.bundle/player_replay"] forState:UIControlStateNormal];
     [msgBtn addTarget:self action:@selector(videoReplayAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:msgBtn];
     _msgBtn = msgBtn;

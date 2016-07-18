@@ -20,6 +20,7 @@
 		2B1A01E61D2E0668007D3984 /* TYLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B1A01E51D2E0668007D3984 /* TYLoadingView.m */; };
 		2B34FC821D18D73400B2F3E6 /* TYVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B34FC811D18D73400B2F3E6 /* TYVideoPlayer.m */; };
 		2B34FC891D19361600B2F3E6 /* TYVideoPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B34FC881D19361600B2F3E6 /* TYVideoPlayerTrack.m */; };
+		2B51A0771D3CCBA8000E908F /* TYVideoPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2B51A0761D3CCBA8000E908F /* TYVideoPlayer.bundle */; };
 		2B59ACF71D2B936000B10FB4 /* TYVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACF61D2B936000B10FB4 /* TYVideoPlayerView.m */; };
 		2B59ACFA1D2B93E800B10FB4 /* TYVideoControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACF91D2B93E800B10FB4 /* TYVideoControlView.m */; };
 		2B59ACFD1D2BA80300B10FB4 /* SimpleVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B59ACFC1D2BA80300B10FB4 /* SimpleVideoViewController.m */; };
@@ -64,6 +65,7 @@
 		2B34FC811D18D73400B2F3E6 /* TYVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoPlayer.m; sourceTree = "<group>"; };
 		2B34FC871D19361600B2F3E6 /* TYVideoPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoPlayerTrack.h; sourceTree = "<group>"; };
 		2B34FC881D19361600B2F3E6 /* TYVideoPlayerTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoPlayerTrack.m; sourceTree = "<group>"; };
+		2B51A0761D3CCBA8000E908F /* TYVideoPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TYVideoPlayer.bundle; sourceTree = "<group>"; };
 		2B59ACF51D2B936000B10FB4 /* TYVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoPlayerView.h; sourceTree = "<group>"; };
 		2B59ACF61D2B936000B10FB4 /* TYVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYVideoPlayerView.m; sourceTree = "<group>"; };
 		2B59ACF81D2B93E800B10FB4 /* TYVideoControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYVideoControlView.h; sourceTree = "<group>"; };
@@ -165,8 +167,17 @@
 				2B59ACF31D2B932600B10FB4 /* Player */,
 				2B59ACF41D2B933200B10FB4 /* View */,
 				2B05CB0B1D2D095000647989 /* Controller */,
+				2B51A0751D3CCB93000E908F /* Resource */,
 			);
 			path = TYVideoPlayer;
+			sourceTree = "<group>";
+		};
+		2B51A0751D3CCB93000E908F /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				2B51A0761D3CCBA8000E908F /* TYVideoPlayer.bundle */,
+			);
+			name = Resource;
 			sourceTree = "<group>";
 		};
 		2B59ACF31D2B932600B10FB4 /* Player */ = {
@@ -283,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B11F7681D17888000BFA5DF /* LaunchScreen.storyboard in Resources */,
+				2B51A0771D3CCBA8000E908F /* TYVideoPlayer.bundle in Resources */,
 				2B11F7651D17888000BFA5DF /* Assets.xcassets in Resources */,
 				2B11F7631D17888000BFA5DF /* Main.storyboard in Resources */,
 			);

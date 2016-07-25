@@ -159,7 +159,7 @@
 }
 
 - (float)volume {
-    return _videoPlayer.player.volume;
+    return _videoPlayer.volume;
 }
 
 - (void)setVolume:(float)volume {
@@ -169,7 +169,7 @@
         return;
     }
     
-    _videoPlayer.player.volume = volume;
+    _videoPlayer.volume = volume;
 }
 
 #pragma mark - video player

@@ -292,7 +292,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 10;
 {
     
     if (!_track.isPlayedToEnd && _track.isVideoLoadedBefore && _track.continueLastWatchTime) {
-        // save
+        // 保存上次观看时间
         [self saveLastWatchTimeWithOldState:_state];
     }
     
@@ -539,6 +539,21 @@ static const NSInteger kTYVideoPlayerTimeOut = 10;
     if (self.state == TYVideoPlayerStateContentPlaying) {
         [_player setRate:rate];
     }
+}
+
+- (float)rate
+{
+    return _player.rate;
+}
+
+- (float)volume
+{
+    return _player.volume;
+}
+
+- (void)setVolume:(float)volume
+{
+    [_player setVolume:volume];
 }
 
 - (BOOL)isPlaying

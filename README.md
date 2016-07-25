@@ -21,6 +21,43 @@ a video player for iOS，wrapper AVPlayer,and based on AVFoundation，highly cus
 
 ## Usage
 
+### API
+```objc
+// 播放超时
+typedef NS_ENUM(NSUInteger, TYVideoPlayerTimeOut) {
+    // 开始加载超时
+    TYVideoPlayerTimeOutLoad,
+    // seek超时
+    TYVideoPlayerTimeOutSeek,
+    // 缓存超时
+    TYVideoPlayerTimeOutBuffer,
+};
+
+// 播放状态
+typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
+    // 未知
+    TYVideoPlayerStateUnknown,
+    // 请求StreamURL
+    TYVideoPlayerStateRequestStreamURL,
+    // 加载中
+    TYVideoPlayerStateContentLoading,
+    // 准备播放
+    TYVideoPlayerStateContentReadyToPlay,
+    // 播放
+    TYVideoPlayerStateContentPlaying,
+    // 暂停播放
+    TYVideoPlayerStateContentPaused,
+    // 暂停卡顿缓冲中
+    TYVideoPlayerStateBuffering,
+    // seek
+    TYVideoPlayerStateSeeking,
+    // 停止播放
+    TYVideoPlayerStateStopped,
+    // 失败
+    TYVideoPlayerStateError
+};
+```
+
 ### Delegate
 ```objc
 @protocol TYVideoPlayerDelegate <NSObject>

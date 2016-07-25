@@ -47,9 +47,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     BOOL _isEndToSeek;
     
     NSInteger _loadingTimeOut;  // 初始化加载超时时间
-    
     NSInteger _seekingTimeOut;  // seek 超时时间
-    
     NSInteger _bufferingTimeOut;// 缓冲超时时间
 }
 
@@ -543,6 +541,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     return (self.player && self.player.rate != 0.0);
 }
 
+// 当前时间
 - (NSTimeInterval)currentTime
 {
     if (_track.isVideoLoadedBefore) {
@@ -553,6 +552,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     }
 }
 
+// 总进度
 - (NSTimeInterval)duration
 {
     Float64 duration = CMTimeGetSeconds([self.player.currentItem duration]);
@@ -560,6 +560,17 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
         return 0;
     }
     return duration;
+}
+
+// 缓冲进度
+- (NSTimeInterval)availableDuration
+{
+    NSArray *loadedTimeRanges = [_playerItem loadedTimeRanges];
+    CMTimeRange timeRange = [loadedTimeRanges.firstObject CMTimeRangeValue];// 获取缓冲区域
+    Float64 startSeconds = CMTimeGetSeconds(timeRange.start);
+    Float64 durationSeconds = CMTimeGetSeconds(timeRange.duration);
+    NSTimeInterval result = startSeconds + durationSeconds;// 计算缓冲总进度
+    return result;
 }
 
 #pragma mark - private method
@@ -582,7 +593,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 - (void)notifyErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
 {
     if ([_delegate respondsToSelector:@selector(videoPlayer:track:receivedErrorCode:error:)]) {
-        TYDLog(@"receivedErrorCode %ld error %@",errorCode,error);
+        TYDLog(@"receivedErrorCode %ld error %@",(unsigned long)errorCode,error);
         [_delegate videoPlayer:self track:_track receivedErrorCode:errorCode error:error];
     }
 }

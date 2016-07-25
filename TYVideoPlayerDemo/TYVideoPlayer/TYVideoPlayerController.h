@@ -33,7 +33,6 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerControllerEvent) {
 @end
 
 
-
 @interface TYVideoPlayerController : UIViewController
 
 @property (nonatomic, weak) id<TYVideoPlayerControllerDelegate> delegate;
@@ -49,6 +48,8 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerControllerEvent) {
 @property (nonatomic, assign, readonly) BOOL isControlViewHidden;
 // 视频缩放
 @property (nonatomic, copy) NSString *videoGravity;
+// 音量
+@property (nonatomic, assign) float volume;
 // 播放失败自动重试，默认2次 ，0 为不重试
 @property (nonatomic, assign) NSInteger failedToAutoRetryCount;
 

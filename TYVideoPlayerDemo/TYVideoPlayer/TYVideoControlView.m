@@ -15,8 +15,8 @@
 #define kBackBtnLeftEdage 10
 #define kTitleViewTopEdge 20
 #define kTitleViewHight 28
-#define kBottomViewBottomEdge 8
-#define kBottomViewHeight 22
+#define kBottomViewBottomEdge 4
+#define kBottomViewHeight 26
 #define kSuspendBtnHeight 60
 
 @interface TYVideoControlView ()
@@ -147,6 +147,11 @@
     _bottomView.progressSlider.value = progress;
 }
 
+- (void)setBufferProgress:(CGFloat)progress
+{
+    _bottomView.progressView.progress = progress;
+}
+
 - (void)setFullScreen:(BOOL)fullScreen
 {
     _bottomView.fullScreenBtn.hidden = fullScreen;
@@ -177,6 +182,7 @@
     _bottomView.curTimeLabel.hidden = hidden;
     _bottomView.totalTimeLabel.hidden = hidden;
     _bottomView.progressSlider.hidden = hidden;
+    _bottomView.progressView.hidden = hidden;
 }
 
 #pragma mark - action

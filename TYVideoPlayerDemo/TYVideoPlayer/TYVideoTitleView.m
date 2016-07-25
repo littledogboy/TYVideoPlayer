@@ -62,7 +62,7 @@
 {
     [super layoutSubviews];
     
-    _backBtn.frame = CGRectMake(kViewHorizenlSpacing, 0, kBackBtnHeightWidth, kBackBtnHeightWidth);
+    _backBtn.frame = CGRectMake(kViewHorizenlSpacing, 0, kBackBtnHeightWidth+5, kBackBtnHeightWidth);
     
     _titleLabel.frame = CGRectMake(CGRectGetMaxX(_backBtn.frame)+kViewHorizenlSpacing, 0, CGRectGetWidth(self.frame) - 2*(CGRectGetMaxX(_backBtn.frame)+kViewHorizenlSpacing), kBackBtnHeightWidth);
 }

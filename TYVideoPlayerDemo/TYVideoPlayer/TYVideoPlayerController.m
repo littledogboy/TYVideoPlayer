@@ -14,6 +14,11 @@
 #import "TYVideoErrorView.h"
 
 @interface TYVideoPlayerController () <TYVideoPlayerDelegate, TYVideoControlViewDelegate>
+{
+    float _volume; // 音量
+    NSInteger _curAutoRetryCount; // 当前重试次数
+    BOOL _isDraging; // 正在拖拽
+}
 
 // 播放视图层
 @property (nonatomic, weak) TYVideoPlayerView *playerView;
@@ -26,10 +31,6 @@
 
 // 播放器
 @property (nonatomic, strong) TYVideoPlayer *videoPlayer;
-
-// 是否正在拖动slider
-@property (nonatomic, assign) BOOL isDraging;
-@property (nonatomic, assign) NSInteger curAutoRetryCount;
 
 @end
 
@@ -155,6 +156,20 @@
     if (_playerView) {
         _playerView.playerLayer.videoGravity = videoGravity;
     }
+}
+
+- (float)volume {
+    return _videoPlayer.player.volume;
+}
+
+- (void)setVolume:(float)volume {
+    _volume = volume;
+    
+    if (!_videoPlayer.player) {
+        return;
+    }
+    
+    _videoPlayer.player.volume = volume;
 }
 
 #pragma mark - video player
@@ -304,7 +319,7 @@
 - (BOOL)autoRetryLoadCurrentVideo
 {
     if (_curAutoRetryCount++ < _failedToAutoRetryCount) {
-        NSLog(@"autoRetryLoadCurrentVideoCount %ld",_curAutoRetryCount);
+        NSLog(@"autoRetryLoadCurrentVideoCount %ld",(long)_curAutoRetryCount);
         [self reloadCurrentVideo];
         return YES;
     }
@@ -458,6 +473,7 @@
 }
 #pragma mark - TYVideoPlayerDelegate
 
+// 状态改变
 - (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeToState:(TYVideoPlayerState)toState fromState:(TYVideoPlayerState)fromState
 {
     // update UI
@@ -467,6 +483,7 @@
     [self player:videoPlayer didChangeToState:toState];
 }
 
+// 更新时间
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track didUpdatePlayTime:(NSTimeInterval)playTime
 {
     if (_isDraging) {
@@ -475,9 +492,18 @@
     
     NSString *time = [self covertToStringWithTime:playTime];
     [_controlView setCurrentVideoTime:time];
-    [_controlView setSliderProgress:playTime/[videoPlayer duration]];
+    NSTimeInterval duration = [videoPlayer duration];
+    NSTimeInterval availableDuration = [videoPlayer availableDuration];
+    if (duration <= 0) {
+        [_controlView setSliderProgress:0];
+        [_controlView setBufferProgress:0];
+    }else {
+        [_controlView setSliderProgress:playTime/duration];
+        [_controlView setBufferProgress:MIN(availableDuration/duration, 1.0)];
+    }
 }
 
+// 播放结束
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track
 {
     NSLog(@"播放完成！");
@@ -494,6 +520,7 @@
     }
 }
 
+// 播放错误
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
 {
     NSLog(@"videoPlayer receivedErrorCode %@",error);
@@ -510,9 +537,10 @@
     }];
 }
 
+// 播放超时
 - (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedTimeout:(TYVideoPlayerTimeOut)timeout
 {
-    NSLog(@"videoPlayer receivedTimeout %ld",timeout);
+    NSLog(@"videoPlayer receivedTimeout %ld",(unsigned long)timeout);
     
     if ([self autoRetryLoadCurrentVideo]) {
         return;
@@ -618,8 +646,6 @@
 - (void)dealloc
 {
     [self stop];
-    
-    NSLog(@"TYVideoPlayerController dealloc");
 }
 
 @end

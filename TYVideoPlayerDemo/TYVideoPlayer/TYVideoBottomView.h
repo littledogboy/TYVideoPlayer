@@ -12,14 +12,14 @@
 
 // 当前播放时长
 @property (nonatomic, weak, readonly) UILabel *curTimeLabel;
-
 // 总播放时长
 @property (nonatomic, weak, readonly) UILabel *totalTimeLabel;
-
 // 全屏按钮
 @property (nonatomic, weak, readonly) UIButton *fullScreenBtn;
-
-// 进度条
+// 时间进度条
 @property (nonatomic, weak, readonly) UISlider *progressSlider;
+// 缓冲进度条
+@property (nonatomic, weak, readonly) UIProgressView *progressView;
+
 
 @end

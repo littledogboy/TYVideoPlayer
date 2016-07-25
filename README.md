@@ -20,3 +20,38 @@ a video player for iOS，wrapper AVPlayer,and based on AVFoundation，highly cus
 ![image](https://github.com/12207480/TYVideoPlayer/blob/master/ScreenShot/TYVideoPlayer.gif)
 
 ## Usage
+
+### Delegate
+```objc
+@protocol TYVideoPlayerDelegate <NSObject>
+@optional
+
+// 是否应该播放
+- (BOOL)videoPlayer:(TYVideoPlayer*)videoPlayer shouldPlayTrack:(id<TYVideoPlayerTrack>)track;
+
+// 将要播放
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer willPlayTrack:(id<TYVideoPlayerTrack>)track;
+
+// 播放完成
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer didEndToPlayTrack:(id<TYVideoPlayerTrack>)track;
+
+// 是否应该改变状态
+- (BOOL)videoPlayer:(TYVideoPlayer*)videoPlayer shouldChangeToState:(TYVideoPlayerState)toState;
+
+// 将要改变状态
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track willChangeToState:(TYVideoPlayerState)toState fromState:(TYVideoPlayerState)fromState;
+
+// 已经改变状态
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didChangeToState:(TYVideoPlayerState)toState fromState:(TYVideoPlayerState)fromState;
+
+// 播放时间定时更新（s）
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track didUpdatePlayTime:(NSTimeInterval)playTime;
+
+// 播放超时
+- (void)videoPlayer:(TYVideoPlayer *)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedTimeout:(TYVideoPlayerTimeOut)timeout;
+
+// 播放出错
+- (void)videoPlayer:(TYVideoPlayer*)videoPlayer track:(id<TYVideoPlayerTrack>)track receivedErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error;
+@end
+
+```

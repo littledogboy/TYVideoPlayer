@@ -40,7 +40,7 @@ static NSString *const kTYVideoPlayerStatusKey = @"status";
 static NSString *const kTYVideoPlayerBufferEmptyKey = @"playbackBufferEmpty";
 static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepUp";
 
-static const NSInteger kTYVideoPlayerTimeOut = 10;
+static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 @interface TYVideoPlayer () {
     

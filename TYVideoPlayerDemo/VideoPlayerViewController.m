@@ -68,7 +68,7 @@
 {
     // 点播
     // http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8
-    NSURL *streamURL = [NSURL URLWithString:@"http://baobab.wdjcdn.com/1456117847747a_x264.mp4"];
+    NSURL *streamURL = [NSURL URLWithString:@"http://baobab.wdjcdn.com/1456317490140jiyiyuetai_x264.mp4"];
     
     [_playerController loadVideoWithStreamURL:streamURL];
 }

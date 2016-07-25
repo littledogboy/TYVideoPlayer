@@ -149,7 +149,7 @@
 
 - (void)setBufferProgress:(CGFloat)progress
 {
-    _bottomView.progressView.progress = progress;
+    [_bottomView.progressView setProgress:progress animated:YES];
 }
 
 - (void)setFullScreen:(BOOL)fullScreen

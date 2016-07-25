@@ -16,3 +16,7 @@ a video player for iOS，wrapper AVPlayer,and based on AVFoundation，highly cus
 * 支持视频继续上次观看时间位置。
 * 支持高度自定义UI，全屏，包含丰富的代理方法。
 
+## ScreenShot
+![image](https://github.com/12207480/TYVideoPlayer/blob/master/ScreenShot/TYVideoPlayer.gif)
+
+## Usage

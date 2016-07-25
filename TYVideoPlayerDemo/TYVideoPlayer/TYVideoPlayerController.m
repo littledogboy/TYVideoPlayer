@@ -336,13 +336,17 @@
                 [self hideControlViewWithAnimation:NO];
             }
             [_controlView setSliderProgress:0];
+            [_controlView setBufferProgress:0];
             [_controlView setCurrentVideoTime:@"00:00"];
             [_controlView setTotalVideoTime:@"00:00"];
             break;
         case TYVideoPlayerStateContentReadyToPlay:
         {
-            NSString *time = [self covertToStringWithTime:[_videoPlayer duration]];
-            [_controlView setTotalVideoTime:time];
+            NSString *totalTime = [self covertToStringWithTime:[_videoPlayer duration]];
+            NSString *currentTime = [self covertToStringWithTime:[_videoPlayer currentTime]];
+            [_controlView setTotalVideoTime:totalTime];
+            [_controlView setCurrentVideoTime:currentTime];
+            [_controlView setSliderProgress:[_videoPlayer currentTime]/[_videoPlayer duration]];
             [_controlView setTimeSliderHidden:_videoPlayer.track.videoType == TYVideoPlayerTrackLIVE];
             if (_shouldAutoplayVideo) {
                 [self hideControlViewWithDelay:5.0];
@@ -528,7 +532,7 @@
     if ([self autoRetryLoadCurrentVideo]) {
         return;
     }
-    
+    [_loadingView stopAnimation];
     [_controlView setPlayBtnHidden:YES];
     
     __weak typeof(self) weakSelf = self;
@@ -545,7 +549,7 @@
     if ([self autoRetryLoadCurrentVideo]) {
         return;
     }
-    
+    [_loadingView stopAnimation];
     [_controlView setPlayBtnHidden:YES];
     
     __weak typeof(self) weakSelf = self;

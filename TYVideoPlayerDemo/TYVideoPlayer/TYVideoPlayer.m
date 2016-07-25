@@ -40,7 +40,7 @@ static NSString *const kTYVideoPlayerStatusKey = @"status";
 static NSString *const kTYVideoPlayerBufferEmptyKey = @"playbackBufferEmpty";
 static NSString *const kTYVideoPlayerLikelyToKeepUpKey = @"playbackLikelyToKeepUp";
 
-static const NSInteger kTYVideoPlayerTimeOut = 60;
+static const NSInteger kTYVideoPlayerTimeOut = 10;
 
 @interface TYVideoPlayer () {
     
@@ -195,6 +195,9 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
         case TYVideoPlayerStateContentLoading:
              [self performSelector:@selector(URLAssetTimeOut) withObject:nil afterDelay:_loadingTimeOut];
             break;
+        case TYVideoPlayerStateContentReadyToPlay:
+            _track.isVideoLoadedBefore = YES;
+            break;
         case TYVideoPlayerStateSeeking:
             [self performSelector:@selector(seekingTimeOut) withObject:nil afterDelay:_seekingTimeOut];
             break;
@@ -207,28 +210,17 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
             }
             break;
         case TYVideoPlayerStateContentPaused:
-            if (oldState != TYVideoPlayerStateContentLoading && oldState != TYVideoPlayerStateRequestStreamURL) {
-                _track.isVideoLoadedBefore = NO;
-                _track.lastTimeInSeconds = [self currentTime];
-            }
             [_player pause];
             break;
         case TYVideoPlayerStateError:
-            [self cancleAllTimeOut];
             [_player pause];
-            if (oldState != TYVideoPlayerStateContentLoading && oldState != TYVideoPlayerStateRequestStreamURL) {
-                _track.isVideoLoadedBefore = NO;
-                _track.lastTimeInSeconds = [self currentTime];
-            }
+            [self saveLastWatchTimeWithOldState:oldState];
             [self notifyErrorCode:kVideoPlayerErrorAVPlayerFail error:nil];
         case TYVideoPlayerStateStopped:
             [self cancleAllTimeOut];
             [_playerItem cancelPendingSeeks];
             [_player pause];
-            if (oldState != TYVideoPlayerStateContentLoading && oldState != TYVideoPlayerStateRequestStreamURL) {
-                _track.isVideoLoadedBefore = NO;
-                _track.lastTimeInSeconds = [self currentTime];
-            }
+            [self saveLastWatchTimeWithOldState:oldState];
             [self clearVideoPlayer];
         default:
             break;
@@ -237,6 +229,14 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     TYDLog(@"didChangeFromState %@",[self descriptionState:oldState]);
     if ([_delegate respondsToSelector:@selector(videoPlayer:track:didChangeToState:fromState:)]) {
         [_delegate videoPlayer:self track:_track didChangeToState:_state fromState:oldState];
+    }
+}
+
+- (void)saveLastWatchTimeWithOldState:(TYVideoPlayerState)oldState
+{
+    if (oldState != TYVideoPlayerStateContentLoading && oldState != TYVideoPlayerStateRequestStreamURL) {
+        _track.lastTimeInSeconds = [self currentTime];
+        _track.isVideoLoadedBefore = NO;
     }
 }
 
@@ -290,6 +290,12 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)reloadCurrentVideoTrack
 {
+    
+    if (!_track.isPlayedToEnd && _track.isVideoLoadedBefore && _track.continueLastWatchTime) {
+        // save
+        [self saveLastWatchTimeWithOldState:_state];
+    }
+    
     void (^completionBlock)() = ^{
         [self reloadVideoTrack:_track];
     };
@@ -430,7 +436,6 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
             return;
         }
         self.state = TYVideoPlayerStateStopped;
-        self.track.isVideoLoadedBefore = YES;
     });
 }
 
@@ -544,9 +549,9 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 // 当前时间
 - (NSTimeInterval)currentTime
 {
-    if (_track.isVideoLoadedBefore) {
-        _track.isVideoLoadedBefore = NO;
-        return MIN(_track.lastTimeInSeconds, 0);
+    if (!_track.isVideoLoadedBefore) {
+        // 还没加载视频
+        return MAX(_track.lastTimeInSeconds, 0);
     }else{
         return CMTimeGetSeconds([self.player currentTime]);
     }
@@ -592,6 +597,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 
 - (void)notifyErrorCode:(TYVideoPlayerErrorCode)errorCode error:(NSError *)error
 {
+    [self cancleAllTimeOut];
     if ([_delegate respondsToSelector:@selector(videoPlayer:track:receivedErrorCode:error:)]) {
         TYDLog(@"receivedErrorCode %ld error %@",(unsigned long)errorCode,error);
         [_delegate videoPlayer:self track:_track receivedErrorCode:errorCode error:error];
@@ -645,6 +651,8 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
 - (void)notifyTimeOut:(TYVideoPlayerTimeOut)timeOut
 {
     dispatch_main_async_safe_ty(^{
+        [_player pause];
+        [self saveLastWatchTimeWithOldState:_state];
         if ([_delegate respondsToSelector:@selector(videoPlayer:track:receivedTimeout:)]) {
             TYDLog(@"receivedTimeout %@",[self descriptionTimeOut:timeOut]);
             [_delegate videoPlayer:self track:_track receivedTimeout:timeOut];
@@ -820,7 +828,7 @@ static const NSInteger kTYVideoPlayerTimeOut = 60;
     
     if ([self isPlaying] && _isEndToSeek) {
         _track.videoTime = timeInSeconds;
-        //TYDLog(@"timeInSeconds %ld",(NSInteger)timeInSeconds);
+        TYDLog(@"timeInSeconds %ld",(NSInteger)timeInSeconds);
         if ([_delegate respondsToSelector:@selector(videoPlayer:track:didUpdatePlayTime:)]) {
             [_delegate videoPlayer:self track:_track didUpdatePlayTime:timeInSeconds];
         }

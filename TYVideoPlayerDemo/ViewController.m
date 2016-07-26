@@ -23,7 +23,7 @@
 
 - (IBAction)presentVideoPlayerController:(id)sender {
     TYVideoPlayerController *playerController = [[TYVideoPlayerController alloc]init];
-    playerController.streamURL = [NSURL URLWithString:@"http://down.233.com/2014_2015/2014/jzs1/jingji_zhenti_yjw/6-qllgl2v5x9b80vvgwgzzlnzydkj1bpr66hnool80.mp4"];
+    playerController.streamURL = [NSURL URLWithString:@"http://baobab.wdjcdn.com/1456317490140jiyiyuetai_x264.mp4"];
     [self presentViewController:playerController animated:YES completion:nil];
 }
 

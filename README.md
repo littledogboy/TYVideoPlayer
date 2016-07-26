@@ -2,6 +2,8 @@
 a video player for iOS，wrapper AVPlayer,and based on AVFoundation，highly custom.
 <br>TYVideoPlayer是一个封装了AVPlayer的视频播放器组件，支持点播，直播和本地播放。
 <br>TYVideoPlayerController是一个封装了TYVideoPlayer带播放UI的控制器。
+<br>视频下载请看:[TYDownloadManager](https://github.com/12207480/TYDownloadManager)
+
 
 ## Requirements
 * Xcode 6 or higher

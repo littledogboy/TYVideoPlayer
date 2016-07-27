@@ -128,6 +128,7 @@ typedef NS_ENUM(NSUInteger, TYVideoPlayerState) {
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL;
 
 - (void)loadVideoWithTrack:(id<TYVideoPlayerTrack>)track;
+
 /** 可以更换playerLayerView */
 - (void)loadVideoWithStreamURL:(NSURL *)streamURL playerLayerView:(UIView<TYPlayerLayer> *)playerLayerView;
 

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface AppDelegate ()
 
@@ -17,6 +18,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    //设置音频会话(静音状态也可播放声音)
+    AVAudioSession *audionSession = [AVAudioSession sharedInstance];
+    [audionSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [audionSession setActive:YES error:nil];
     return YES;
 }
 
